@@ -1,0 +1,584 @@
+/* Project Requirements Management Styles */
+
+:root {
+  --primary-color: #2c3e50;
+  --secondary-color: #3498db;
+  --accent-color: #e74c3c;
+  --light-bg: #f5f7f9;
+  --dark-bg: #34495e;
+  --text-color: #333;
+  --light-text: #fff;
+  --success-color: #27ae60;
+  --warning-color: #f39c12;
+  --danger-color: #e74c3c;
+  --box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s ease;
+  --border-color: #ddd;
+}
+
+/* Requirements List Table */
+.requirements-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  table-layout: fixed;
+}
+
+.requirements-table th, 
+.requirements-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.requirements-table th {
+  background-color: #f8f9fa;
+  font-weight: 500;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.requirements-table tr:hover {
+  background-color: #f5f5f5;
+}
+
+.requirements-table .requirement-title {
+  color: var(--secondary-color);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.requirements-table .requirement-title:hover {
+  color: var(--primary-color);
+}
+
+.requirements-table .project-id {
+  font-family: monospace;
+  font-size: 0.9em;
+}
+
+.requirements-table .content-preview {
+  color: #666;
+  max-width: 300px;
+}
+
+.requirements-table .date {
+  white-space: nowrap;
+  font-size: 0.9em;
+}
+
+.requirements-table .has-attachment {
+  text-align: center;
+}
+
+.requirements-table .has-attachment i {
+  color: var(--secondary-color);
+}
+
+/* Search and Filter Section */
+.search-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 20px;
+  align-items: center;
+}
+
+.search-filters .form-group {
+  margin-bottom: 0;
+  flex: 1;
+  min-width: 200px;
+}
+
+.search-filters .form-control {
+  width: 100%;
+}
+
+/* Detail View */
+.requirement-detail {
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: var(--box-shadow);
+  margin-bottom: 20px;
+}
+
+.requirement-detail-header {
+  padding: 15px 20px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.requirement-detail-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.requirement-detail-header .status-badge {
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.requirement-detail-body {
+  padding: 20px;
+}
+
+.requirement-meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.meta-item {
+  background-color: #f8f9fa;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.meta-label {
+  font-size: 0.8rem;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+.meta-value {
+  font-weight: 500;
+}
+
+.requirement-content {
+  background-color: #f8f9fa;
+  padding: 15px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  white-space: pre-wrap;
+  font-family: 'Courier New', monospace;
+  line-height: 1.5;
+  min-height: 200px;
+  border: 1px solid #ddd;
+}
+
+.requirement-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--border-color);
+  padding-top: 15px;
+}
+
+/* Editor Styles */
+.editor-toolbar {
+  background-color: #f8f9fa;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-bottom: none;
+  border-radius: 4px 4px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.editor-toolbar button {
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.editor-toolbar button:hover {
+  background-color: #f1f1f1;
+}
+
+.editor-toolbar button.active {
+  background-color: #e9ecef;
+  border-color: #ced4da;
+}
+
+.editor-toolbar .separator {
+  width: 1px;
+  height: 24px;
+  background-color: #ddd;
+  margin: 0 5px;
+}
+
+.editor-container {
+  margin-bottom: 20px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.editor-content {
+  width: 100%;
+  min-height: 300px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 0 0 4px 4px;
+  font-family: 'Courier New', monospace;
+  line-height: 1.5;
+  resize: vertical;
+}
+
+/* File Attachment Styles */
+.file-attachments {
+  margin-top: 20px;
+}
+
+.file-attachments-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.file-list {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  max-height: 200px;
+  overflow-y: auto;
+  background-color: #f8f9fa;
+}
+
+.file-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  border-bottom: 1px solid #ddd;
+}
+
+.file-item:last-child {
+  border-bottom: none;
+}
+
+.file-icon {
+  margin-right: 10px;
+  color: var(--secondary-color);
+}
+
+.file-name {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.file-size {
+  margin: 0 15px;
+  color: #666;
+  font-size: 0.9em;
+}
+
+.file-actions {
+  display: flex;
+  gap: 5px;
+}
+
+.file-actions button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #666;
+  transition: all 0.2s ease;
+}
+
+.file-actions button:hover {
+  color: var(--primary-color);
+}
+
+.file-upload-area {
+  border: 2px dashed #ddd;
+  border-radius: 4px;
+  padding: 20px;
+  text-align: center;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.file-upload-area:hover {
+  border-color: var(--secondary-color);
+}
+
+.file-upload-area i {
+  font-size: 24px;
+  color: var(--secondary-color);
+  margin-bottom: 10px;
+}
+
+/* Settings Panel */
+.settings-panel {
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: var(--box-shadow);
+  margin-bottom: 20px;
+}
+
+.settings-header {
+  padding: 15px 20px;
+  border-bottom: 1px solid var(--border-color);
+  font-weight: 500;
+}
+
+.settings-body {
+  padding: 20px;
+}
+
+.settings-group {
+  margin-bottom: 20px;
+}
+
+.settings-group:last-child {
+  margin-bottom: 0;
+}
+
+.settings-group h4 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 1rem;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+  .requirements-table {
+    display: block;
+    overflow-x: auto;
+  }
+  
+  .search-filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .search-filters .form-group {
+    width: 100%;
+  }
+  
+  .requirement-meta {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* 등록 구분 뱃지 스타일 */
+.requirement-type {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 3px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: white;
+}
+
+.type-new {
+  background-color: #27ae60; /* 신규 개발 요구사항 */
+}
+
+.type-change {
+  background-color: #f39c12; /* 요구사항 변경 */
+}
+
+.type-additional {
+  background-color: #3498db; /* 추가 요구사항 */
+}
+
+.type-improvement {
+  background-color: #9b59b6; /* 개선 제안 */
+}
+
+.type-bug {
+  background-color: #e74c3c; /* 오류 수정 */
+}
+
+.type-other {
+  background-color: #95a5a6; /* 기타 */
+}
+
+/* 등록자 유형 스타일 */
+.registrant-type {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.registrant-type .ai-badge {
+  background-color: #3498db;
+  color: white;
+  padding: 2px 5px;
+  border-radius: 3px;
+  font-size: 0.7rem;
+}
+
+/* 액션 버튼 */
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.add-requirement-btn {
+  background-color: var(--secondary-color);
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.add-requirement-btn:hover {
+  background-color: #2980b9;
+}
+
+/* 탭 스타일 */
+.tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 20px;
+}
+
+.tab {
+  padding: 10px 20px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.tab:hover {
+  background-color: #f5f5f5;
+}
+
+.tab.active {
+  border-bottom-color: var(--secondary-color);
+  color: var(--secondary-color);
+  font-weight: 500;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* 찾기/바꾸기 패널 */
+.find-replace-panel {
+  background-color: #f8f9fa;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-top: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.find-replace-panel .form-control {
+  flex: 1;
+  min-width: 100px;
+}
+
+.find-replace-panel .btn {
+  padding: 5px 10px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.find-replace-panel .btn:hover {
+  background-color: #f1f1f1;
+}
+
+/* 문서 버전 관리 */
+.version-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.version-control select {
+  padding: 5px 10px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  background-color: white;
+}
+
+.version-history {
+  margin-top: 20px;
+}
+
+.version-history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.version-history-list {
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.version-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-bottom: 1px solid #ddd;
+}
+
+.version-item:last-child {
+  border-bottom: none;
+}
+
+.version-info {
+  flex: 1;
+}
+
+.version-number {
+  font-weight: 500;
+}
+
+.version-date {
+  font-size: 0.9em;
+  color: #666;
+}
+
+.version-author {
+  font-style: italic;
+  color: #666;
+}
+
+/* 유틸리티 */
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.mb-10 {
+  margin-bottom: 10px;
+}
+
+.mb-20 {
+  margin-bottom: 20px;
+}
+
+.hidden {
+  display: none;
+}

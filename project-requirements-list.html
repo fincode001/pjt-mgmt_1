@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>사용자 요구사항 관리 - 프로젝트 관리 시스템</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/requirements.css">
+</head>
+<body>
+  <!-- 헤더 -->
+  <header>
+    <div class="container header-flex">
+      <div class="logo">
+        <img src="https://public.youware.com/users-website-assets/prod/390865ac-0750-43f9-bbd7-a9ab75350c72/g453cbe7b2f1d85e975cdc6060ff85ce14472a5ceefab7895be5cc34ad7d064edfab33405af6bda843c2f86c256b9dae94e862a1e429c2f867ef976699d1a7b9d_640.jpg" alt="로고">
+        <span>프로젝트 관리 시스템</span>
+      </div>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.html"><i class="fas fa-home"></i> 홈</a></li>
+          <li><a href="project-list.html"><i class="fas fa-list"></i> 프로젝트 목록</a></li>
+          <li><a href="dashboard.html"><i class="fas fa-chart-line"></i> 대시보드</a></li>
+          <li><a href="pages/settings.html"><i class="fas fa-cog"></i> 설정</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- 메인 콘텐츠 -->
+  <div class="main-wrapper">
+    <!-- 사이드바 -->
+    <aside class="sidebar">
+      <ul class="sidebar-menu">
+        <li><a href="index.html"><i class="fas fa-plus-circle"></i> 신규 프로젝트</a></li>
+        <li><a href="project-list.html"><i class="fas fa-list"></i> 프로젝트 목록</a></li>
+        <li><a href="dashboard.html"><i class="fas fa-chart-line"></i> 대시보드</a></li>
+        <li><a href="pages/folder-management.html"><i class="fas fa-folder"></i> 작업 폴더 관리</a></li>
+        <li><a href="pages/environment-info.html"><i class="fas fa-cog"></i> 환경 정보</a></li>
+        <li><a href="pages/reference-url.html"><i class="fas fa-link"></i> 참고 URL 관리</a></li>
+        <li><a href="pages/mcp-servers.html"><i class="fas fa-server"></i> MCP 서버 리스트</a></li>
+        <li><a href="project-relationship.html"><i class="fas fa-project-diagram"></i> 프로젝트 관계도</a></li>
+        <li><a href="project-requirements-list.html" class="active"><i class="fas fa-comments"></i> 사용자 요구사항</a></li>
+      </ul>
+    </aside>
+
+    <!-- 본문 영역 -->
+    <main class="main-content">
+      <div class="form-section">
+        <div class="form-header">
+          <span><i class="fas fa-comments"></i> 사용자 요구사항 관리</span>
+          <button class="add-requirement-btn" onclick="location.href='project-requirements.html'">
+            <i class="fas fa-plus"></i> 새 요구사항 등록
+          </button>
+        </div>
+        <div class="form-body">
+          <!-- 탭 메뉴 -->
+          <div class="tabs">
+            <div class="tab active" data-tab="all">전체 보기</div>
+            <div class="tab" data-tab="project">프로젝트별 보기</div>
+            <div class="tab" data-tab="search">통합 검색</div>
+            <div class="tab" data-tab="settings">환경설정</div>
+          </div>
+
+          <!-- 전체 보기 탭 -->
+          <div class="tab-content active" id="all-tab">
+            <!-- 검색 및 필터 -->
+            <div class="search-filters">
+              <div class="form-group">
+                <input type="text" class="form-control" placeholder="요구사항 제목/내용 검색" id="global-search">
+              </div>
+              <div class="form-group">
+                <select class="form-control" id="type-filter">
+                  <option value="">모든 유형</option>
+                  <option value="new">신규 개발요구사항</option>
+                  <option value="change">요구사항 변경(정정)</option>
+                  <option value="additional">추가 요구사항</option>
+                  <option value="improvement">기타 개선 제안 사항</option>
+                  <option value="bug">오류수정</option>
+                  <option value="other">기타</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <select class="form-control" id="registrant-filter">
+                  <option value="">모든 등록자</option>
+                  <option value="user">사용자</option>
+                  <option value="chatgpt">ChatGPT</option>
+                  <option value="claude">Claude Sonnet</option>
+                  <option value="gemini">Google Gemini</option>
+                  <option value="grok">Grok 3</option>
+                  <option value="qwen">Qwen 3</option>
+                  <option value="deepseek">DeepSeek R1</option>
+                  <option value="llama">LLaMA 3</option>
+                  <option value="groq">Groq</option>
+                </select>
+              </div>
+              <button class="btn btn-primary" onclick="applyFilters()">
+                <i class="fas fa-search"></i> 검색
+              </button>
+            </div>
+
+            <!-- 요구사항 목록 테이블 -->
+            <div class="form-section">
+              <div class="form-body">
+                <table class="requirements-table">
+                  <thead>
+                    <tr>
+                      <th style="width: 150px;">프로젝트명</th>
+                      <th style="width: 120px;">프로젝트 ID</th>
+                      <th style="width: 100px;">등록자</th>
+                      <th style="width: 100px;">구분</th>
+                      <th style="width: 200px;">요구사항 제목</th>
+                      <th style="width: 300px;">요구사항 내용 (일부)</th>
+                      <th style="width: 120px;">최종 변경일</th>
+                      <th style="width: 60px;">첨부파일</th>
+                      <th style="width: 200px;">첨부파일명 및 보관장소</th>
+                    </tr>
+                  </thead>
+                  <tbody id="requirements-list">
+                    <tr>
+                      <td>프로젝트 관리 시스템 구축</td>
+                      <td class="project-id">2025-A-01-001-Ver0.1</td>
+                      <td>
+                        <div class="registrant-type">
+                          <span>홍길동</span>
+                        </div>
+                      </td>
+                      <td>
+                        <span class="requirement-type type-new">신규 개발요구사항</span>
+                      </td>
+                      <td>
+                        <span class="requirement-title" onclick="viewRequirement('req001')">진척률 실시간 대시보드 구현</span>
+                      </td>
+                      <td class="content-preview">프로젝트 진척률을 실시간으로 확인할 수 있는 대시보드 화면이 필요합니다. 차트 형태로 시각화하여...</td>
+                      <td class="date">2025-06-01 14:30</td>
+                      <td class="has-attachment">
+                        <i class="fas fa-paperclip" title="첨부파일 있음"></i>
+                      </td>
+                      <td>dashboard_mockup.png<br><small>/files/req001/</small></td>
+                    </tr>
+                    <tr>
+                      <td>전자문서 관리 시스템</td>
+                      <td class="project-id">2025-A-02-001-Ver0.1</td>
+                      <td>
+                        <div class="registrant-type">
+                          <span>김철수</span>
+                        </div>
+                      </td>
+                      <td>
+                        <span class="requirement-type type-change">요구사항 변경</span>
+                      </td>
+                      <td>
+                        <span class="requirement-title" onclick="viewRequirement('req002')">문서 검색 기능 개선</span>
+                      </td>
+                      <td class="content-preview">기존 단순 검색에서 고급 검색 기능으로 변경이 필요합니다. 태그 기반 검색과 전문 검색을...</td>
+                      <td class="date">2025-05-30 09:15</td>
+                      <td class="has-attachment">
+                        <i class="fas fa-times" title="첨부파일 없음"></i>
+                      </td>
+                      <td>-</td>
+                    </tr>
+                    <tr>
+                      <td>고객 데이터 분석 시스템</td>
+                      <td class="project-id">2025-B-01-002-Ver1.3</td>
+                      <td>
+                        <div class="registrant-type">
+                          <span>ChatGPT</span>
+                          <span class="ai-badge">AI</span>
+                        </div>
+                      </td>
+                      <td>
+                        <span class="requirement-type type-additional">추가 요구사항</span>
+                      </td>
+                      <td>
+                        <span class="requirement-title" onclick="viewRequirement('req003')">AI 기반 예측 모델 추가</span>
+                      </td>
+                      <td class="content-preview">기존 통계 분석에 더해 AI 머신러닝 기반의 예측 모델을 추가하여 고객 행동 패턴을...</td>
+                      <td class="date">2025-05-28 16:45</td>
+                      <td class="has-attachment">
+                        <i class="fas fa-paperclip" title="첨부파일 있음"></i>
+                      </td>
+                      <td>ml_requirements.pdf<br>model_specs.docx<br><small>/files/req003/</small></td>
+                    </tr>
+                    <tr>
+                      <td>인공지능 챗봇 개발</td>
+                      <td class="project-id">2025-C-03-001-Ver0.2</td>
+                      <td>
+                        <div class="registrant-type">
+                          <span>박민수</span>
+                        </div>
+                      </td>
+                      <td>
+                        <span class="requirement-type type-bug">오류수정</span>
+                      </td>
+                      <td>
+                        <span class="requirement-title" onclick="viewRequirement('req004')">한국어 자연어 처리 개선</span>
+                      </td>
+                      <td class="content-preview">현재 챗봇이 복잡한 한국어 문장을 제대로 이해하지 못하는 문제가 있습니다. 특히 존댓말과...</td>
+                      <td class="date">2025-05-25 11:20</td>
+                      <td class="has-attachment">
+                        <i class="fas fa-times" title="첨부파일 없음"></i>
+                      </td>
+                      <td>-</td>
+                    </tr>
+                    <tr>
+                      <td>모바일 앱 리뉴얼</td>
+                      <td class="project-id">2025-B-02-003-Ver0.5</td>
+                      <td>
+                        <div class="registrant-type">
+                          <span>Claude Sonnet</span>
+                          <span class="ai-badge">AI</span>
+                        </div>
+                      </td>
+                      <td>
+                        <span class="requirement-type type-improvement">개선 제안</span>
+                      </td>
+                      <td>
+                        <span class="requirement-title" onclick="viewRequirement('req005')">사용자 경험 개선 방안</span>
+                      </td>
+                      <td class="content-preview">현재 앱의 사용자 인터페이스를 분석한 결과, 네비게이션 구조 개선과 터치 친화적인...</td>
+                      <td class="date">2025-05-22 13:10</td>
+                      <td class="has-attachment">
+                        <i class="fas fa-paperclip" title="첨부파일 있음"></i>
+                      </td>
+                      <td>ux_analysis.pdf<br>wireframes.zip<br><small>/files/req005/</small></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- 프로젝트별 보기 탭 -->
+          <div class="tab-content" id="project-tab">
+            <div class="form-group">
+              <label for="project-selector">프로젝트 선택</label>
+              <select class="form-control" id="project-selector" onchange="loadProjectRequirements()">
+                <option value="">프로젝트를 선택하세요</option>
+                <option value="2025-A-01-001-Ver0.1">프로젝트 관리 시스템 구축 (2025-A-01-001-Ver0.1)</option>
+                <option value="2025-A-02-001-Ver0.1">전자문서 관리 시스템 (2025-A-02-001-Ver0.1)</option>
+                <option value="2025-B-01-002-Ver1.3">고객 데이터 분석 시스템 (2025-B-01-002-Ver1.3)</option>
+                <option value="2025-C-03-001-Ver0.2">인공지능 챗봇 개발 (2025-C-03-001-Ver0.2)</option>
+                <option value="2025-B-02-003-Ver0.5">모바일 앱 리뉴얼 (2025-B-02-003-Ver0.5)</option>
+              </select>
+            </div>
+            <div id="project-requirements-container">
+              <p class="text-center">프로젝트를 선택하면 해당 프로젝트의 요구사항 목록이 표시됩니다.</p>
+            </div>
+          </div>
+
+          <!-- 통합 검색 탭 -->
+          <div class="tab-content" id="search-tab">
+            <div class="form-group">
+              <label for="unified-search">통합 검색</label>
+              <div class="search-filters">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="unified-search" placeholder="모든 프로젝트에서 검색할 키워드를 입력하세요">
+                </div>
+                <div class="form-group">
+                  <label>
+                    <input type="radio" name="search-type" value="exact" checked> 전체 일치
+                  </label>
+                  <label style="margin-left: 15px;">
+                    <input type="radio" name="search-type" value="partial"> 부분 일치
+                  </label>
+                </div>
+                <button class="btn btn-primary" onclick="performUnifiedSearch()">
+                  <i class="fas fa-search"></i> 통합 검색
+                </button>
+              </div>
+            </div>
+            <div id="search-results-container">
+              <p class="text-center">검색 키워드를 입력하고 검색 버튼을 클릭하세요.</p>
+            </div>
+          </div>
+
+          <!-- 환경설정 탭 -->
+          <div class="tab-content" id="settings-tab">
+            <div class="settings-panel">
+              <div class="settings-header">
+                <i class="fas fa-cogs"></i> 환경설정
+              </div>
+              <div class="settings-body">
+                <div class="settings-group">
+                  <h4>파일 저장 설정</h4>
+                  <div class="form-group">
+                    <label for="file-save-path">파일 저장 위치</label>
+                    <div class="form-row">
+                      <div class="form-col">
+                        <input type="text" class="form-control" id="file-save-path" value="/project_files/requirements/" readonly>
+                      </div>
+                      <div class="form-col" style="flex: 0 0 auto;">
+                        <button class="btn btn-primary" onclick="selectFilePath()">
+                          <i class="fas fa-folder-open"></i> 찾아보기
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>
+                      <input type="checkbox" id="auto-backup" checked> 자동 백업 활성화
+                    </label>
+                  </div>
+                  <div class="form-group">
+                    <label for="backup-interval">백업 주기</label>
+                    <select class="form-control" id="backup-interval">
+                      <option value="daily">매일</option>
+                      <option value="weekly" selected>매주</option>
+                      <option value="monthly">매월</option>
+                    </select>
+                  </div>
+                </div>
+                
+                <div class="settings-group">
+                  <h4>에디터 설정</h4>
+                  <div class="form-group">
+                    <label for="font-size">글꼴 크기</label>
+                    <select class="form-control" id="font-size">
+                      <option value="12">12px</option>
+                      <option value="14" selected>14px</option>
+                      <option value="16">16px</option>
+                      <option value="18">18px</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>
+                      <input type="checkbox" id="auto-save" checked> 자동 저장 (3분마다)
+                    </label>
+                  </div>
+                </div>
+                
+                <div class="settings-group">
+                  <h4>권한 설정</h4>
+                  <div class="form-group">
+                    <label>사용자 권한</label>
+                    <div>
+                      <label><input type="checkbox" checked disabled> 등록 (C)</label>
+                      <label><input type="checkbox" checked disabled> 읽기 (R)</label>
+                      <label><input type="checkbox" checked disabled> 수정 (U)</label>
+                      <label><input type="checkbox" checked disabled> 삭제 (D)</label>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>AI 권한</label>
+                    <div>
+                      <label><input type="checkbox" checked disabled> 등록 (C)</label>
+                      <label><input type="checkbox" checked disabled> 읽기 (R)</label>
+                      <label><input type="checkbox" disabled> 수정 (U)</label>
+                      <label><input type="checkbox" disabled> 삭제 (D)</label>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="action-buttons">
+                  <button class="btn btn-primary" onclick="saveSettings()">
+                    <i class="fas fa-save"></i> 설정 저장
+                  </button>
+                  <button class="btn" onclick="resetSettings()">
+                    <i class="fas fa-undo"></i> 기본값으로 복원
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- 푸터 -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>프로젝트 관리 시스템</h3>
+          <p>체계적인 프로젝트 관리를 위한 종합 솔루션</p>
+        </div>
+        <div class="footer-section">
+          <h3>바로가기</h3>
+          <div class="footer-links">
+            <a href="index.html">홈</a>
+            <a href="project-list.html">프로젝트 목록</a>
+            <a href="dashboard.html">대시보드</a>
+            <a href="#">설정</a>
+          </div>
+        </div>
+        <div class="footer-section">
+          <h3>고객지원</h3>
+          <p>이메일: support@projectsystem.co.kr</p>
+          <p>전화: 02-123-4567</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 프로젝트 관리 시스템. All Rights Reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/requirements.js"></script>
+</body>
+</html>

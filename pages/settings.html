@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>설정 - 프로젝트 관리 시스템</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .settings-nav {
+      margin-bottom: 20px;
+      border-bottom: 1px solid #ddd;
+    }
+    
+    .settings-nav ul {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .settings-nav li {
+      padding: 10px 15px;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.3s ease;
+    }
+    
+    .settings-nav li.active {
+      border-bottom-color: var(--secondary-color);
+      color: var(--secondary-color);
+      font-weight: 500;
+    }
+    
+    .settings-nav li:hover {
+      background-color: #f5f7f9;
+    }
+    
+    .settings-section {
+      display: none;
+    }
+    
+    .settings-section.active {
+      display: block;
+    }
+    
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 24px;
+    }
+    
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 24px;
+    }
+    
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+    
+    input:checked + .toggle-slider {
+      background-color: var(--secondary-color);
+    }
+    
+    input:checked + .toggle-slider:before {
+      transform: translateX(26px);
+    }
+    
+    .setting-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .setting-item:last-child {
+      border-bottom: none;
+    }
+    
+    .setting-info {
+      max-width: 70%;
+    }
+    
+    .setting-title {
+      font-weight: 500;
+      margin-bottom: 5px;
+    }
+    
+    .setting-description {
+      font-size: 13px;
+      color: #666;
+    }
+    
+    .color-picker {
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 15px;
+    }
+    
+    .color-option {
+      width: 30px;
+      height: 30px;
+      border-radius: 4px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: all 0.3s ease;
+    }
+    
+    .color-option.selected {
+      border-color: #000;
+      transform: scale(1.1);
+    }
+    
+    .theme-preview {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+    
+    .theme-preview.light {
+      background-color: #f8f9fa;
+      color: #333;
+      border: 1px solid #ddd;
+    }
+    
+    .theme-preview.dark {
+      background-color: #333;
+      color: #f8f9fa;
+      border: 1px solid #555;
+    }
+    
+    .profile-avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      margin-bottom: 15px;
+      object-fit: cover;
+      border: 2px solid #ddd;
+    }
+    
+    .profile-info {
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <!-- 헤더 -->
+  <header>
+    <div class="container header-flex">
+      <div class="logo">
+        <img src="https://public.youware.com/users-website-assets/prod/390865ac-0750-43f9-bbd7-a9ab75350c72/g453cbe7b2f1d85e975cdc6060ff85ce14472a5ceefab7895be5cc34ad7d064edfab33405af6bda843c2f86c256b9dae94e862a1e429c2f867ef976699d1a7b9d_640.jpg" alt="로고">
+        <span>프로젝트 관리 시스템</span>
+      </div>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="../index.html"><i class="fas fa-home"></i> 홈</a></li>
+          <li><a href="../project-list.html"><i class="fas fa-list"></i> 프로젝트 목록</a></li>
+          <li><a href="../dashboard.html"><i class="fas fa-chart-line"></i> 대시보드</a></li>
+          <li><a href="settings.html" class="active"><i class="fas fa-cog"></i> 설정</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- 메인 콘텐츠 -->
+  <div class="main-wrapper">
+    <!-- 사이드바 -->
+    <aside class="sidebar">
+      <ul class="sidebar-menu">
+        <li><a href="../index.html"><i class="fas fa-plus-circle"></i> 신규 프로젝트</a></li>
+        <li><a href="../project-list.html"><i class="fas fa-list"></i> 프로젝트 목록</a></li>
+        <li><a href="../dashboard.html"><i class="fas fa-chart-line"></i> 대시보드</a></li>
+        <li><a href="folder-management.html"><i class="fas fa-folder"></i> 작업 폴더 관리</a></li>
+        <li><a href="environment-info.html"><i class="fas fa-cog"></i> 환경 정보</a></li>
+        <li><a href="reference-url.html"><i class="fas fa-link"></i> 참고 URL 관리</a></li>
+        <li><a href="mcp-servers.html"><i class="fas fa-server"></i> MCP 서버 리스트</a></li>
+        <li><a href="../project-relationship.html"><i class="fas fa-project-diagram"></i> 프로젝트 관계도</a></li>
+        <li><a href="../project-requirements-list.html"><i class="fas fa-comments"></i> 사용자 요구사항</a></li>
+      </ul>
+    </aside>
+
+    <!-- 본문 영역 -->
+    <main class="main-content">
+      <h2>설정</h2>
+      
+      <div class="settings-nav">
+        <ul>
+          <li class="active" data-tab="general">일반</li>
+          <li data-tab="appearance">테마</li>
+          <li data-tab="notifications">알림</li>
+          <li data-tab="security">보안</li>
+          <li data-tab="profile">프로필</li>
+        </ul>
+      </div>
+      
+      <!-- 일반 설정 -->
+      <div class="settings-section active" id="general">
+        <div class="form-section">
+          <div class="form-header">
+            일반 설정
+          </div>
+          <div class="form-body">
+            <div class="setting-item">
+              <div class="setting-info">
+                <div class="setting-title">언어 설정</div>
+                <div class="setting-description">시스템에 표시되는 언어를 변경합니다.</div>
+              </div>
+              <div class="setting-control">
+                <select class="form-control">
+                  <option value="ko" selected>한국어</option>
+                  <option value="en">English</option>
+                  <option value="ja">日本語</option>
+                  <option value="zh">中文</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="setting-item">
+              <div class="setting-info">
+                <div class="setting-title">시간대 설정</div>
+                <div class="setting-description">날짜와 시간을 표시할 시간대를 설정합니다.</div>
+              </div>
+              <div class="setting-control">
+                <select class="form-control">
+                  <option value="Asia/Seoul" selected>(GMT+9:00) 서울, 도쿄</option>
+                  <option value="America/New_York">(GMT-5:00) 뉴욕</option>
+                  <option value="America/Los_Angeles">(GMT-8:00) 로스앤젤레스</option>
+                  <option value="Europe/London">(GMT+0:00) 런던</option>
+                  <option value="Europe/Paris">(GMT+1:00) 파리, 베를린</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="setting-item">
+              <div class="setting-info">
+                <div class="setting-title">자동 저장</div>
+                <div class="setting-description">양식을 작성할 때 자동으로 저장합니다.</div>
+              </div>
+              <div class="setting-control">
+                <label class="toggle-switch">
+                  <input type="checkbox" checked>
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+            </div>
+            
+            <div class="setting-item">
+              <div class="setting-info">
+                <div class="setting-title">자동 로그아웃</div>
+                <div class="setting-description">30분 동안 활동이 없으면 자동으로 로그아웃합니다.</div>
+              </div>
+              <div class="setting-control">
+                <label class="toggle-switch">
+                  <input type="checkbox">
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 테마 설정 -->
+      <div class="settings-section" id="appearance">
+        <div class="form-section">
+          <div class="form-header">
+            테마 설정
+          </div>
+          <div class="form-body">
+            <div class="setting-item">
+              <div class="setting-info">
+                <div class="setting-title">다크 모드</div>
+                <div class="setting-description">어두운 테마를 사용합니다.</div>
+              </div>
+              <div class="setting-control">
+                <label class="toggle-switch">
+                  <input type="checkbox" id="dark-mode-toggle">
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+            </div>
+            
+            <div class="setting-item">
+              <div class="setting-info">
+                <div class="setting-title">강조 색상</div>
+                <div class="setting-description">시스템의 강조 색상을 변경합니다.</div>
+              </div>
+              <div class="setting-control">
+                <div class="color-picker">
+                  <div class="color-option selected" style="background-color: #3498db;" data-color="#3498db"></div>
+                  <div class="color-option" style="background-color: #2ecc71;" data-color="#2ecc71"></div>
+                  <div class="color-option" style="background-color: #e74c3c;" data-color="#e74c3c"></div>
+                  <div class="color-option" style="background-color: #f39c12;" data-color="#f39c12"></div>
+                  <div class="color-option" style="background-color: #9b59b6;" data-color="#9b59b6"></div>
+                  <div class="color-option" style="background-color: #1abc9c;" data-color="#1abc9c"></div>
+                  <div class="color-option" style="background-color: #34495e;" data-color="#34495e"></div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="setting-item">
+              <div class="setting-info">
+                <div class="setting-title">글꼴 크기</div>
+                <div class="setting-description">텍스트의 기본 크기를 설정합니다.</div>
+              </div>
+              <div class="setting-control">
+                <select class="form-control">
+                  <option value="small">작게</option>
+                  <option value="medium" selected>보통</option>
+                  <option value="large">크게</option>
+                  <option value="x-large">매우 크게</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="theme-preview light" id="theme-preview">
+              <h4>테마 미리보기</h4>
+              <p>선택한 테마 설정에 따라 사용자 인터페이스가 표시되는 방식입니다.</p>
+              <button class="btn btn-primary">버튼 예시</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 알림 설정 -->
+      <div class="settings-section" id="notifications">
+        <div class="form-section">
+          <div class="form-header">
+            알림 설정
+          </div>
+          <div class="form-body">
+            <div class="setting-item">
+              <div class="setting-info">
+                <div class="setting-title">이메일 알림</div>
+                <div class="setting-description">중요한 변경사항에 대한 이메일 알림을 받습니다.</div>
+              </div>
+              <div class="setting-control">
+                <label class="toggle-switch">
+                  <input type="checkbox" checked>
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+            </div>
+            
+            <div class="setting-item">
+              <div class="setting-info">
+                <div class="setting-title">브라우저 알림</div>
+                <div class="setting-description">브라우저에서 실시간 알림을 받습니다.</div>
+              </div>
+              <div class="setting-control">
+                <label class="toggle-switch">
+                  <input type="checkbox">
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+            </div>
+            
+            <div class="setting-item">
+              <div class="setting-info">
+                <div class="setting-title">프로젝트 마감일 알림</div>
+                <div class="setting-description">프로젝트 마감일이 다가오면 알림을 받습니다.</div>
+              </div>
+              <div class="setting-control">
+                <label class="toggle-switch">
+                  <input type="checkbox" checked>
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+            </div>
+            
+            <div class="setting-item">
+              <div class="setting-info">
+                <div class="setting-title">상태 변경 알림</div>
+                <div class="setting-description">프로젝트 상태가 변경되면 알림을 받습니다.</div>
+              </div>
+              <div class="setting-control">
+                <label class="toggle-switch">
+                  <input type="checkbox" checked>
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 보안 설정 -->
+      <div class="settings-section" id="security">
+        <div class="form-section">
+          <div class="form-header">
+            보안 설정
+          </div>
+          <div class="form-body">
+            <div class="setting-item">
+              <div class="setting-info">
+                <div class="setting-title">비밀번호 변경</div>
+                <div class="setting-description">계정 보안을 위해 주기적으로 비밀번호를 변경하세요.</div>
+              </div>
+              <div class="setting-control">
+                <button class="btn">변경하기</button>
+              </div>
+            </div>
+            
+            <div class="setting-item">
+              <div class="setting-info">
+                <div class="setting-title">2단계 인증</div>
+                <div class="setting-description">보안 강화를 위해 2단계 인증을 활성화합니다.</div>
+              </div>
+              <div class="setting-control">
+                <label class="toggle-switch">
+                  <input type="checkbox">
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+            </div>
+            
+            <div class="setting-item">
+              <div class="setting-info">
+                <div class="setting-title">로그인 기록</div>
+                <div class="setting-description">계정에 로그인한 기록을 확인합니다.</div>
+              </div>
+              <div class="setting-control">
+                <button class="btn">기록 보기</button>
+              </div>
+            </div>
+            
+            <div class="setting-item">
+              <div class="setting-info">
+                <div class="setting-title">API 키 관리</div>
+                <div class="setting-description">API 키를 생성하고 관리합니다.</div>
+              </div>
+              <div class="setting-control">
+                <button class="btn">관리하기</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 프로필 설정 -->
+      <div class="settings-section" id="profile">
+        <div class="form-section">
+          <div class="form-header">
+            프로필 설정
+          </div>
+          <div class="form-body">
+            <div class="profile-info text-center">
+              <img src="https://public.youware.com/users-website-assets/prod/390865ac-0750-43f9-bbd7-a9ab75350c72/g0ec8c5a8ba4df2a3a0adaa8cb85d01b9fb99a36dba26eb56ca4cd91af7bb4db1c13affc8c48c79b3c09f0a3f84dd3b02fb93f9b2f12f9b0c27a62e79cd3dfa32_640.png" alt="프로필 이미지" class="profile-avatar">
+              <button class="btn">이미지 변경</button>
+            </div>
+            
+            <div class="form-group">
+              <label for="profile-name">이름</label>
+              <input type="text" id="profile-name" class="form-control" value="홍길동">
+            </div>
+            
+            <div class="form-group">
+              <label for="profile-email">이메일</label>
+              <input type="email" id="profile-email" class="form-control" value="hong@example.com">
+            </div>
+            
+            <div class="form-group">
+              <label for="profile-position">직급</label>
+              <input type="text" id="profile-position" class="form-control" value="프로젝트 매니저">
+            </div>
+            
+            <div class="form-group">
+              <label for="profile-department">부서</label>
+              <input type="text" id="profile-department" class="form-control" value="개발팀">
+            </div>
+            
+            <div class="form-group">
+              <label for="profile-bio">자기소개</label>
+              <textarea id="profile-bio" class="form-control" rows="3">10년차 개발자로 프로젝트 관리 및 팀 리딩을 담당하고 있습니다.</textarea>
+            </div>
+            
+            <div class="text-center mt-20">
+              <button class="btn btn-primary">변경사항 저장</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- 푸터 -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>프로젝트 관리 시스템</h3>
+          <p>체계적인 프로젝트 관리를 위한 종합 솔루션</p>
+        </div>
+        <div class="footer-section">
+          <h3>바로가기</h3>
+          <div class="footer-links">
+            <a href="../index.html">홈</a>
+            <a href="../project-list.html">프로젝트 목록</a>
+            <a href="../dashboard.html">대시보드</a>
+            <a href="settings.html">설정</a>
+          </div>
+        </div>
+        <div class="footer-section">
+          <h3>고객지원</h3>
+          <p>이메일: support@projectsystem.co.kr</p>
+          <p>전화: 02-123-4567</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 프로젝트 관리 시스템. All Rights Reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // 설정 탭 전환
+      const tabLinks = document.querySelectorAll('.settings-nav li');
+      const settingsSections = document.querySelectorAll('.settings-section');
+      
+      tabLinks.forEach(link => {
+        link.addEventListener('click', function() {
+          // 활성화된 탭 초기화
+          tabLinks.forEach(tab => tab.classList.remove('active'));
+          settingsSections.forEach(section => section.classList.remove('active'));
+          
+          // 새 탭 활성화
+          this.classList.add('active');
+          const tabId = this.dataset.tab;
+          document.getElementById(tabId).classList.add('active');
+        });
+      });
+      
+      // 다크 모드 토글
+      const darkModeToggle = document.getElementById('dark-mode-toggle');
+      const themePreview = document.getElementById('theme-preview');
+      
+      darkModeToggle.addEventListener('change', function() {
+        if (this.checked) {
+          themePreview.classList.remove('light');
+          themePreview.classList.add('dark');
+        } else {
+          themePreview.classList.remove('dark');
+          themePreview.classList.add('light');
+        }
+      });
+      
+      // 색상 선택
+      const colorOptions = document.querySelectorAll('.color-option');
+      const primaryButton = document.querySelector('.btn-primary');
+      
+      colorOptions.forEach(option => {
+        option.addEventListener('click', function() {
+          // 선택된 색상 초기화
+          colorOptions.forEach(opt => opt.classList.remove('selected'));
+          
+          // 새 색상 선택
+          this.classList.add('selected');
+          const selectedColor = this.dataset.color;
+          
+          // 미리보기에 적용
+          primaryButton.style.backgroundColor = selectedColor;
+          document.documentElement.style.setProperty('--secondary-color', selectedColor);
+        });
+      });
+      
+      // 버튼 클릭 이벤트
+      const buttons = document.querySelectorAll('.form-body .btn');
+      buttons.forEach(button => {
+        if (!button.classList.contains('btn-primary')) {
+          button.addEventListener('click', function() {
+            alert('이 기능은 현재 개발 중입니다.');
+          });
+        }
+      });
+      
+      // 프로필 저장 버튼
+      const saveProfileBtn = document.querySelector('.btn-primary');
+      saveProfileBtn.addEventListener('click', function() {
+        alert('프로필 정보가 성공적으로 저장되었습니다.');
+      });
+    });
+  </script>
+</body>
+</html>

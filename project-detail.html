@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>프로젝트 상세 정보 - 프로젝트 관리 시스템</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .back-to-list {
+      margin-bottom: 20px;
+      display: inline-flex;
+      align-items: center;
+      color: var(--secondary-color);
+      transition: all 0.3s ease;
+    }
+    
+    .back-to-list:hover {
+      color: var(--primary-color);
+    }
+    
+    .back-to-list i {
+      margin-right: 5px;
+    }
+    
+    .project-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .project-title {
+      font-size: 1.8rem;
+      color: var(--primary-color);
+      margin-bottom: 5px;
+    }
+    
+    .project-code {
+      color: #777;
+      font-family: monospace;
+      font-size: 1rem;
+    }
+    
+    .project-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    
+    .meta-item {
+      display: flex;
+      flex-direction: column;
+      background-color: #f8f9fa;
+      padding: 10px 15px;
+      border-radius: 4px;
+      min-width: 120px;
+    }
+    
+    .meta-label {
+      font-size: 0.8rem;
+      color: #777;
+      margin-bottom: 5px;
+    }
+    
+    .meta-value {
+      font-weight: 500;
+    }
+    
+    .detail-section {
+      margin-bottom: 30px;
+    }
+    
+    .detail-section-title {
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+      padding-bottom: 5px;
+      border-bottom: 1px solid #eee;
+      color: var(--primary-color);
+    }
+    
+    .detail-content {
+      padding: 0 10px;
+    }
+    
+    .project-overview {
+      line-height: 1.6;
+      white-space: pre-line;
+    }
+    
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 30px;
+    }
+    
+    .related-projects {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 15px;
+    }
+    
+    .related-project-card {
+      background-color: #fff;
+      border-radius: 4px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      padding: 15px;
+      transition: all 0.3s ease;
+    }
+    
+    .related-project-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+    
+    .related-project-title {
+      font-weight: 500;
+      margin-bottom: 5px;
+      color: var(--secondary-color);
+    }
+    
+    .related-project-relationship {
+      font-size: 0.9rem;
+      color: #777;
+    }
+    
+    .project-files {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 15px;
+    }
+    
+    .file-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 15px;
+      background-color: #f8f9fa;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+    
+    .file-item:hover {
+      background-color: #e9ecef;
+    }
+    
+    .file-icon {
+      font-size: 2rem;
+      color: var(--secondary-color);
+      margin-bottom: 10px;
+    }
+    
+    .file-name {
+      font-size: 0.9rem;
+      word-break: break-all;
+    }
+    
+    @media (max-width: 768px) {
+      .project-meta {
+        grid-template-columns: 1fr 1fr;
+      }
+      
+      .action-buttons {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- 헤더 -->
+  <header>
+    <div class="container header-flex">
+      <div class="logo">
+        <img src="https://public.youware.com/users-website-assets/prod/390865ac-0750-43f9-bbd7-a9ab75350c72/g453cbe7b2f1d85e975cdc6060ff85ce14472a5ceefab7895be5cc34ad7d064edfab33405af6bda843c2f86c256b9dae94e862a1e429c2f867ef976699d1a7b9d_640.jpg" alt="로고">
+        <span>프로젝트 관리 시스템</span>
+      </div>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.html"><i class="fas fa-home"></i> 홈</a></li>
+          <li><a href="project-list.html" class="active"><i class="fas fa-list"></i> 프로젝트 목록</a></li>
+          <li><a href="dashboard.html"><i class="fas fa-chart-line"></i> 대시보드</a></li>
+          <li><a href="pages/settings.html"><i class="fas fa-cog"></i> 설정</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- 메인 콘텐츠 -->
+  <div class="main-wrapper">
+    <!-- 사이드바 -->
+    <aside class="sidebar">
+      <ul class="sidebar-menu">
+        <li><a href="index.html"><i class="fas fa-plus-circle"></i> 신규 프로젝트</a></li>
+        <li><a href="project-list.html" class="active"><i class="fas fa-list"></i> 프로젝트 목록</a></li>
+        <li><a href="dashboard.html"><i class="fas fa-chart-line"></i> 대시보드</a></li>
+        <li><a href="pages/folder-management.html"><i class="fas fa-folder"></i> 작업 폴더 관리</a></li>
+        <li><a href="pages/environment-info.html"><i class="fas fa-cog"></i> 환경 정보</a></li>
+        <li><a href="pages/reference-url.html"><i class="fas fa-link"></i> 참고 URL 관리</a></li>
+        <li><a href="pages/mcp-servers.html"><i class="fas fa-server"></i> MCP 서버 리스트</a></li>
+        <li><a href="project-relationship.html"><i class="fas fa-project-diagram"></i> 프로젝트 관계도</a></li>
+        <li><a href="project-requirements-list.html"><i class="fas fa-comments"></i> 사용자 요구사항</a></li>
+      </ul>
+    </aside>
+
+    <!-- 본문 영역 -->
+    <main class="main-content">
+      <a href="project-list.html" class="back-to-list"><i class="fas fa-arrow-left"></i> 프로젝트 목록으로 돌아가기</a>
+      
+      <div class="project-header">
+        <div>
+          <h1 class="project-title" id="project-title">프로젝트 제목 로딩 중...</h1>
+          <div class="project-code" id="project-code">프로젝트 코드 로딩 중...</div>
+        </div>
+        <div class="project-status">
+          <span class="status-badge status-in-progress" id="project-status-badge">상태 로딩 중...</span>
+        </div>
+      </div>
+      
+      <div class="project-meta">
+        <div class="meta-item">
+          <div class="meta-label">중요도</div>
+          <div class="meta-value" id="project-importance">★★★★★</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">긴급도</div>
+          <div class="meta-value" id="project-urgency">★★★★☆</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">진척률</div>
+          <div class="meta-value" id="project-progress">75%</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">일정 경과율</div>
+          <div class="meta-value" id="schedule-progress">65%</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">일정</div>
+          <div class="meta-value" id="project-schedule">2025-05-15 ~ 2025-06-30</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">접수일</div>
+          <div class="meta-value" id="project-reception-date">2025-05-10</div>
+        </div>
+      </div>
+      
+      <div class="detail-section">
+        <h2 class="detail-section-title">프로젝트 개요</h2>
+        <div class="detail-content">
+          <div class="project-overview" id="project-overview">
+            본 프로젝트는 수 많은 프로젝트들을 체계적으로 관리할 시스템을 구축하기 위한 프로젝트입니다. 사용자들이 프로젝트의 진행 상황을 추적하고, 프로젝트 간의 관계를 시각화하며, 리소스를 효율적으로 관리할 수 있는 기능을 제공합니다.
+          </div>
+        </div>
+      </div>
+      
+      <div class="detail-section">
+        <h2 class="detail-section-title">관련 프로젝트</h2>
+        <div class="detail-content">
+          <div class="related-projects" id="related-projects">
+            <div class="related-project-card">
+              <div class="related-project-title">전자문서 관리 시스템</div>
+              <div class="related-project-relationship">관계도: 상 - 문서 관리 기능 연계</div>
+            </div>
+            <div class="related-project-card">
+              <div class="related-project-title">인공지능 챗봇 개발</div>
+              <div class="related-project-relationship">관계도: 중 - 사용자 지원 기능</div>
+            </div>
+            <div class="related-project-card">
+              <div class="related-project-title">모바일 앱 리뉴얼</div>
+              <div class="related-project-relationship">관계도: 하 - 모바일 접근성 지원</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="detail-section">
+        <h2 class="detail-section-title">담당자 정보</h2>
+        <div class="detail-content">
+          <div class="form-row">
+            <div class="form-col">
+              <div class="form-group">
+                <label>프로젝트 제공자</label>
+                <div id="project-provider">홍길동 (hong@naver.com)</div>
+              </div>
+            </div>
+            <div class="form-col">
+              <div class="form-group">
+                <label>프로젝트 전달자</label>
+                <div id="project-deliverer">김철수 (kim@gmail.com)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="detail-section">
+        <h2 class="detail-section-title">프로젝트 파일</h2>
+        <div class="detail-content">
+          <div class="project-files" id="project-files">
+            <div class="file-item">
+              <div class="file-icon"><i class="far fa-file-pdf"></i></div>
+              <div class="file-name">요구사항 명세서.pdf</div>
+            </div>
+            <div class="file-item">
+              <div class="file-icon"><i class="far fa-file-excel"></i></div>
+              <div class="file-name">프로젝트 일정표.xlsx</div>
+            </div>
+            <div class="file-item">
+              <div class="file-icon"><i class="far fa-file-word"></i></div>
+              <div class="file-name">회의록_20250510.docx</div>
+            </div>
+            <div class="file-item">
+              <div class="file-icon"><i class="far fa-file-image"></i></div>
+              <div class="file-name">시스템 구조도.png</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="action-buttons">
+        <a href="#" class="btn btn-primary" id="edit-project">
+          <i class="fas fa-edit"></i> 프로젝트 수정
+        </a>
+        <button class="btn btn-danger">
+          <i class="fas fa-trash-alt"></i> 프로젝트 삭제
+        </button>
+      </div>
+    </main>
+  </div>
+
+  <!-- 푸터 -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>프로젝트 관리 시스템</h3>
+          <p>체계적인 프로젝트 관리를 위한 종합 솔루션</p>
+        </div>
+        <div class="footer-section">
+          <h3>바로가기</h3>
+          <div class="footer-links">
+            <a href="index.html">홈</a>
+            <a href="project-list.html">프로젝트 목록</a>
+            <a href="dashboard.html">대시보드</a>
+            <a href="#">설정</a>
+          </div>
+        </div>
+        <div class="footer-section">
+          <h3>고객지원</h3>
+          <p>이메일: support@projectsystem.co.kr</p>
+          <p>전화: 02-123-4567</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 프로젝트 관리 시스템. All Rights Reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+    // 프로젝트 상세 정보 로드 함수
+    document.addEventListener('DOMContentLoaded', function() {
+      // URL에서 프로젝트 ID 가져오기
+      const urlParams = new URLSearchParams(window.location.search);
+      const projectId = urlParams.get('id');
+      
+      // 프로젝트 ID가 없으면 기본값으로 p001 사용 (샘플)
+      const id = projectId || 'p001';
+      
+      // 해당 ID로 프로젝트 데이터 로드
+      loadProjectData(id);
+      
+      // 수정 버튼 클릭 이벤트 추가
+      const editButton = document.getElementById('edit-project');
+      if (editButton) {
+        editButton.addEventListener('click', function(e) {
+          e.preventDefault();
+          alert('프로젝트 수정 기능은 준비 중입니다.');
+        });
+      }
+    });
+    
+    // 프로젝트 데이터 로드 (실제로는 서버에서 가져와야 함)
+    function loadProjectData(projectId) {
+      // 샘플 데이터 (실제로는 API 호출이 필요)
+      const projectData = {
+        'p001': {
+          title: '프로젝트 관리 시스템 구축',
+          code: '2025-A-01-001-Ver0.1',
+          status: 'in-progress',
+          statusText: '진행중',
+          importance: 5,
+          urgency: 4,
+          progress: 75,
+          scheduleProgress: 65,
+          schedule: '2025-05-15 ~ 2025-06-30',
+          receptionDate: '2025-05-10',
+          overview: '본 프로젝트는 수 많은 프로젝트들을 체계적으로 관리할 시스템을 구축하기 위한 프로젝트입니다. 사용자들이 프로젝트의 진행 상황을 추적하고, 프로젝트 간의 관계를 시각화하며, 리소스를 효율적으로 관리할 수 있는 기능을 제공합니다.',
+          relatedProjects: [
+            { title: '전자문서 관리 시스템', relationship: '상', description: '문서 관리 기능 연계' },
+            { title: '인공지능 챗봇 개발', relationship: '중', description: '사용자 지원 기능' },
+            { title: '모바일 앱 리뉴얼', relationship: '하', description: '모바일 접근성 지원' }
+          ],
+          provider: '홍길동 (hong@naver.com)',
+          deliverer: '김철수 (kim@gmail.com)',
+          files: [
+            { name: '요구사항 명세서.pdf', type: 'pdf' },
+            { name: '프로젝트 일정표.xlsx', type: 'excel' },
+            { name: '회의록_20250510.docx', type: 'word' },
+            { name: '시스템 구조도.png', type: 'image' }
+          ]
+        },
+        'p002': {
+          title: '전자문서 관리 시스템',
+          code: '2025-A-02-001-Ver0.1',
+          status: 'not-started',
+          statusText: '미착수',
+          importance: 3,
+          urgency: 2,
+          progress: 0,
+          scheduleProgress: 0,
+          schedule: '2025-06-10 ~ 2025-07-20',
+          receptionDate: '2025-06-01',
+          overview: '전자문서를 효율적으로 관리하기 위한 시스템을 구축하는 프로젝트입니다. 문서 저장, 검색, 공유, 권한 관리 등의 기능을 제공합니다.',
+          relatedProjects: [
+            { title: '프로젝트 관리 시스템 구축', relationship: '중', description: '프로젝트 문서 연동' },
+            { title: '고객 데이터 분석 시스템', relationship: '중', description: '문서 데이터 분석' }
+          ],
+          provider: '박민수 (park@naver.com)',
+          deliverer: '이영희 (lee@gmail.com)',
+          files: [
+            { name: '요구사항 정의서.pdf', type: 'pdf' },
+            { name: '시스템 아키텍처.png', type: 'image' }
+          ]
+        },
+        'p003': {
+          title: '고객 데이터 분석 시스템',
+          code: '2025-B-01-002-Ver1.3',
+          status: 'completed',
+          statusText: '종료',
+          importance: 4,
+          urgency: 5,
+          progress: 100,
+          scheduleProgress: 100,
+          schedule: '2025-04-01 ~ 2025-05-15',
+          receptionDate: '2025-03-20',
+          overview: '고객 데이터를 수집하고 분석하여 인사이트를 도출하는 시스템을 구축하는 프로젝트입니다. 데이터 마이닝, 머신러닝 기반 예측 모델 등을 활용합니다.',
+          relatedProjects: [
+            { title: '인공지능 챗봇 개발', relationship: '상', description: '고객 데이터 활용' },
+            { title: '모바일 앱 리뉴얼', relationship: '중', description: '사용자 행동 데이터 분석' }
+          ],
+          provider: '최재민 (choi@naver.com)',
+          deliverer: '정수아 (jung@gmail.com)',
+          files: [
+            { name: '분석 결과 보고서.pdf', type: 'pdf' },
+            { name: '데이터 모델링.xlsx', type: 'excel' }
+          ]
+        },
+        'p004': {
+          title: '인공지능 챗봇 개발',
+          code: '2025-C-03-001-Ver0.2',
+          status: 'on-hold',
+          statusText: '보류중단',
+          importance: 4,
+          urgency: 3,
+          progress: 45,
+          scheduleProgress: 70,
+          schedule: '2025-03-10 ~ 2025-06-10',
+          receptionDate: '2025-03-01',
+          overview: '고객 응대를 자동화하기 위한 인공지능 기반 챗봇을 개발하는 프로젝트입니다. 자연어 처리, 대화형 인터페이스 등의 기술을 활용합니다.',
+          relatedProjects: [
+            { title: '고객 데이터 분석 시스템', relationship: '하', description: '데이터 소스 활용' },
+            { title: '프로젝트 관리 시스템 구축', relationship: '중', description: '프로젝트 상태 조회' }
+          ],
+          provider: '이영희 (lee@gmail.com)',
+          deliverer: '홍길동 (hong@naver.com)',
+          files: [
+            { name: '챗봇 아키텍처.pdf', type: 'pdf' },
+            { name: '대화 흐름도.png', type: 'image' }
+          ]
+        },
+        'p005': {
+          title: '모바일 앱 리뉴얼',
+          code: '2025-B-02-003-Ver0.5',
+          status: 'in-progress',
+          statusText: '진행중',
+          importance: 3,
+          urgency: 4,
+          progress: 30,
+          scheduleProgress: 25,
+          schedule: '2025-05-25 ~ 2025-07-10',
+          receptionDate: '2025-05-20',
+          overview: '기존 모바일 앱의 UI/UX를 개선하고 새로운 기능을 추가하는 리뉴얼 프로젝트입니다. 사용자 편의성을 높이고 최신 트렌드를 반영합니다.',
+          relatedProjects: [
+            { title: '프로젝트 관리 시스템 구축', relationship: '상', description: '프로젝트 상태 모니터링' },
+            { title: '고객 데이터 분석 시스템', relationship: '중', description: '사용자 행동 분석' }
+          ],
+          provider: '김철수 (kim@gmail.com)',
+          deliverer: '최재민 (choi@naver.com)',
+          files: [
+            { name: 'UI 디자인.png', type: 'image' },
+            { name: '기능 요구사항.docx', type: 'word' }
+          ]
+        }
+      };
+      
+      // 해당 프로젝트 데이터 가져오기
+      const project = projectData[projectId];
+      
+      // 프로젝트 데이터가 없으면 기본 프로젝트 사용
+      const data = project || projectData['p001'];
+      
+      // 페이지 제목 업데이트
+      document.title = `${data.title} - 프로젝트 관리 시스템`;
+      
+      // 프로젝트 정보 업데이트
+      document.getElementById('project-title').textContent = data.title;
+      document.getElementById('project-code').textContent = data.code;
+      
+      // 상태 배지 업데이트
+      const statusBadge = document.getElementById('project-status-badge');
+      statusBadge.textContent = data.statusText;
+      statusBadge.className = `status-badge status-${data.status}`;
+      
+      // 중요도, 긴급도 업데이트
+      document.getElementById('project-importance').textContent = '★'.repeat(data.importance) + '☆'.repeat(5 - data.importance);
+      document.getElementById('project-urgency').textContent = '★'.repeat(data.urgency) + '☆'.repeat(5 - data.urgency);
+      
+      // 진척률, 일정 경과율 업데이트
+      document.getElementById('project-progress').textContent = `${data.progress}%`;
+      document.getElementById('schedule-progress').textContent = `${data.scheduleProgress}%`;
+      
+      // 일정, 접수일 업데이트
+      document.getElementById('project-schedule').textContent = data.schedule;
+      document.getElementById('project-reception-date').textContent = data.receptionDate;
+      
+      // 개요 업데이트
+      document.getElementById('project-overview').textContent = data.overview;
+      
+      // 관련 프로젝트 업데이트
+      const relatedProjectsEl = document.getElementById('related-projects');
+      relatedProjectsEl.innerHTML = '';
+      
+      data.relatedProjects.forEach(rp => {
+        const card = document.createElement('div');
+        card.className = 'related-project-card';
+        card.innerHTML = `
+          <div class="related-project-title">${rp.title}</div>
+          <div class="related-project-relationship">관계도: ${rp.relationship} - ${rp.description}</div>
+        `;
+        relatedProjectsEl.appendChild(card);
+      });
+      
+      // 담당자 정보 업데이트
+      document.getElementById('project-provider').textContent = data.provider;
+      document.getElementById('project-deliverer').textContent = data.deliverer;
+      
+      // 파일 목록 업데이트
+      const filesEl = document.getElementById('project-files');
+      filesEl.innerHTML = '';
+      
+      data.files.forEach(file => {
+        const fileItem = document.createElement('div');
+        fileItem.className = 'file-item';
+        
+        let iconClass = 'far fa-file';
+        
+        // 파일 유형에 따른 아이콘 설정
+        switch(file.type) {
+          case 'pdf':
+            iconClass = 'far fa-file-pdf';
+            break;
+          case 'excel':
+            iconClass = 'far fa-file-excel';
+            break;
+          case 'word':
+            iconClass = 'far fa-file-word';
+            break;
+          case 'image':
+            iconClass = 'far fa-file-image';
+            break;
+        }
+        
+        fileItem.innerHTML = `
+          <div class="file-icon"><i class="${iconClass}"></i></div>
+          <div class="file-name">${file.name}</div>
+        `;
+        
+        filesEl.appendChild(fileItem);
+      });
+    }
+  </script>
+</body>
+</html>

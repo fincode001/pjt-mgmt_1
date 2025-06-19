@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>참고 URL 관리 - 프로젝트 관리 시스템</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .url-card {
+      background-color: white;
+      border-radius: 4px;
+      box-shadow: var(--box-shadow);
+      margin-bottom: 15px;
+      padding: 15px;
+      transition: all 0.3s ease;
+    }
+    
+    .url-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+    }
+    
+    .url-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    
+    .url-card-title {
+      font-weight: 500;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+    }
+    
+    .url-card-title i {
+      margin-right: 8px;
+      color: var(--secondary-color);
+    }
+    
+    .url-card-actions {
+      display: flex;
+      gap: 5px;
+    }
+    
+    .url-card-link {
+      font-family: monospace;
+      font-size: 14px;
+      padding: 5px 8px;
+      background-color: #f8f9fa;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      margin-top: 10px;
+      word-break: break-all;
+    }
+    
+    .url-card-link a {
+      color: var(--secondary-color);
+      margin-left: 5px;
+    }
+    
+    .url-card-link i {
+      color: #666;
+    }
+    
+    .url-card-date {
+      font-size: 12px;
+      color: #666;
+      margin-top: 10px;
+    }
+    
+    .url-card-tag {
+      display: inline-block;
+      background-color: #e9ecef;
+      color: #495057;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      margin-right: 5px;
+      margin-top: 5px;
+    }
+    
+    .url-form {
+      background-color: white;
+      border-radius: 4px;
+      box-shadow: var(--box-shadow);
+      padding: 15px;
+      margin-bottom: 20px;
+    }
+    
+    .url-filters {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    
+    .url-filters .form-group {
+      margin-bottom: 0;
+      min-width: 200px;
+    }
+    
+    .url-preview {
+      margin-top: 15px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    
+    .url-preview-header {
+      background-color: #f8f9fa;
+      padding: 10px 15px;
+      font-weight: 500;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .url-preview-content {
+      padding: 15px;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+    
+    .url-preview-thumbnail {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto 10px;
+      max-height: 150px;
+    }
+    
+    .url-category {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+      overflow-x: auto;
+      padding-bottom: 5px;
+    }
+    
+    .url-category-item {
+      padding: 5px 15px;
+      background-color: #f8f9fa;
+      border-radius: 20px;
+      font-size: 14px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.3s ease;
+    }
+    
+    .url-category-item:hover {
+      background-color: #e9ecef;
+    }
+    
+    .url-category-item.active {
+      background-color: var(--secondary-color);
+      color: white;
+    }
+    
+    .youtube-preview iframe {
+      width: 100%;
+      height: 200px;
+    }
+    
+    .url-tags {
+      margin-top: 10px;
+    }
+    
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 5px;
+      margin-top: 20px;
+    }
+    
+    .pagination .btn {
+      min-width: 40px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <!-- 헤더 -->
+  <header>
+    <div class="container header-flex">
+      <div class="logo">
+        <img src="https://public.youware.com/users-website-assets/prod/390865ac-0750-43f9-bbd7-a9ab75350c72/g453cbe7b2f1d85e975cdc6060ff85ce14472a5ceefab7895be5cc34ad7d064edfab33405af6bda843c2f86c256b9dae94e862a1e429c2f867ef976699d1a7b9d_640.jpg" alt="로고">
+        <span>프로젝트 관리 시스템</span>
+      </div>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="../index.html"><i class="fas fa-home"></i> 홈</a></li>
+          <li><a href="../project-list.html"><i class="fas fa-list"></i> 프로젝트 목록</a></li>
+          <li><a href="../dashboard.html"><i class="fas fa-chart-line"></i> 대시보드</a></li>
+          <li><a href="settings.html"><i class="fas fa-cog"></i> 설정</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- 메인 콘텐츠 -->
+  <div class="main-wrapper">
+    <!-- 사이드바 -->
+    <aside class="sidebar">
+      <ul class="sidebar-menu">
+        <li><a href="../index.html"><i class="fas fa-plus-circle"></i> 신규 프로젝트</a></li>
+        <li><a href="../project-list.html"><i class="fas fa-list"></i> 프로젝트 목록</a></li>
+        <li><a href="../dashboard.html"><i class="fas fa-chart-line"></i> 대시보드</a></li>
+        <li><a href="folder-management.html"><i class="fas fa-folder"></i> 작업 폴더 관리</a></li>
+        <li><a href="environment-info.html"><i class="fas fa-cog"></i> 환경 정보</a></li>
+        <li><a href="reference-url.html" class="active"><i class="fas fa-link"></i> 참고 URL 관리</a></li>
+        <li><a href="mcp-servers.html"><i class="fas fa-server"></i> MCP 서버 리스트</a></li>
+        <li><a href="../project-relationship.html"><i class="fas fa-project-diagram"></i> 프로젝트 관계도</a></li>
+        <li><a href="../project-requirements-list.html"><i class="fas fa-comments"></i> 사용자 요구사항</a></li>
+      </ul>
+    </aside>
+
+    <!-- 본문 영역 -->
+    <main class="main-content">
+      <h2>참고 URL 관리</h2>
+      
+      <div class="form-section">
+        <div class="form-header">
+          프로젝트 선택
+        </div>
+        <div class="form-body">
+          <div class="form-group">
+            <select id="project-select" class="form-control">
+              <option value="">프로젝트를 선택하세요</option>
+              <option value="p001">프로젝트 관리 시스템 구축</option>
+              <option value="p002">전자문서 관리 시스템</option>
+              <option value="p003">고객 데이터 분석 시스템</option>
+              <option value="p004">인공지능 챗봇 개발</option>
+              <option value="p005">모바일 앱 리뉴얼</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      
+      <div class="url-form">
+        <h3>새 URL 추가</h3>
+        <div class="form-group">
+          <label for="url-title">사이트명 / 유튜브 제목</label>
+          <input type="text" id="url-title" class="form-control" placeholder="제목을 입력하세요" required>
+        </div>
+        <div class="form-group">
+          <label for="url-address">URL 주소</label>
+          <input type="url" id="url-address" class="form-control" placeholder="https://..." required>
+        </div>
+        <div class="form-group">
+          <label for="url-description">설명 (선택사항)</label>
+          <textarea id="url-description" class="form-control" rows="2" placeholder="URL에 대한 간단한 설명을 입력하세요"></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-col">
+            <div class="form-group">
+              <label for="url-category">카테고리</label>
+              <select id="url-category" class="form-control">
+                <option value="website">웹사이트</option>
+                <option value="youtube">유튜브</option>
+                <option value="github">GitHub</option>
+                <option value="document">문서</option>
+                <option value="api">API 문서</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-col">
+            <div class="form-group">
+              <label for="url-tags">태그 (쉼표로 구분)</label>
+              <input type="text" id="url-tags" class="form-control" placeholder="예: 디자인, UI, 참고">
+            </div>
+          </div>
+        </div>
+        <button type="button" id="url-fetch-btn" class="btn">URL 정보 가져오기</button>
+        
+        <div class="url-preview" id="url-preview" style="display: none;">
+          <div class="url-preview-header">
+            <span>URL 미리보기</span>
+            <button type="button" class="btn btn-sm" id="url-preview-close">닫기</button>
+          </div>
+          <div class="url-preview-content" id="url-preview-content">
+            <!-- 미리보기 내용이 여기에 표시됩니다 -->
+          </div>
+        </div>
+        
+        <div class="text-right mt-10">
+          <button type="button" id="url-add-btn" class="btn btn-primary">URL 추가</button>
+        </div>
+      </div>
+      
+      <div class="form-section">
+        <div class="form-header">
+          참고 URL 목록
+        </div>
+        <div class="form-body">
+          <div class="url-filters">
+            <div class="form-group">
+              <input type="text" class="form-control" id="url-search" placeholder="검색어 입력...">
+            </div>
+            <div class="form-group">
+              <select id="url-filter-category" class="form-control">
+                <option value="">모든 카테고리</option>
+                <option value="website">웹사이트</option>
+                <option value="youtube">유튜브</option>
+                <option value="github">GitHub</option>
+                <option value="document">문서</option>
+                <option value="api">API 문서</option>
+              </select>
+            </div>
+            <button class="btn" id="url-search-btn">
+              <i class="fas fa-search"></i> 검색
+            </button>
+          </div>
+          
+          <div class="url-category">
+            <div class="url-category-item active" data-category="all">전체</div>
+            <div class="url-category-item" data-category="website">웹사이트</div>
+            <div class="url-category-item" data-category="youtube">유튜브</div>
+            <div class="url-category-item" data-category="github">GitHub</div>
+            <div class="url-category-item" data-category="document">문서</div>
+            <div class="url-category-item" data-category="api">API 문서</div>
+          </div>
+          
+          <div id="url-list">
+            <!-- 웹사이트 URL 카드 -->
+            <div class="url-card" data-category="website">
+              <div class="url-card-header">
+                <div class="url-card-title">
+                  <i class="fas fa-globe"></i>
+                  프로젝트 관리 시스템 디자인 참고
+                </div>
+                <div class="url-card-actions">
+                  <button class="btn btn-sm" title="수정"><i class="fas fa-edit"></i></button>
+                  <button class="btn btn-danger btn-sm" title="삭제"><i class="fas fa-trash"></i></button>
+                </div>
+              </div>
+              <div class="url-card-description">
+                프로젝트 관리 UI/UX 디자인 참고 사이트입니다. 대시보드 및 프로젝트 목록 레이아웃에 활용할 수 있습니다.
+              </div>
+              <div class="url-card-link">
+                <i class="fas fa-link"></i>
+                <a href="https://example.com/project-management" target="_blank">https://example.com/project-management</a>
+              </div>
+              <div class="url-tags">
+                <span class="url-card-tag">디자인</span>
+                <span class="url-card-tag">UI</span>
+                <span class="url-card-tag">레이아웃</span>
+              </div>
+              <div class="url-card-date">
+                추가일: 2025-05-10
+              </div>
+            </div>
+            
+            <!-- 유튜브 URL 카드 -->
+            <div class="url-card" data-category="youtube">
+              <div class="url-card-header">
+                <div class="url-card-title">
+                  <i class="fab fa-youtube" style="color: #ff0000;"></i>
+                  프로젝트 관리 시스템 개발 가이드
+                </div>
+                <div class="url-card-actions">
+                  <button class="btn btn-sm" title="수정"><i class="fas fa-edit"></i></button>
+                  <button class="btn btn-danger btn-sm" title="삭제"><i class="fas fa-trash"></i></button>
+                </div>
+              </div>
+              <div class="url-card-description">
+                프로젝트 관리 시스템 개발에 대한 단계별 가이드 영상입니다.
+              </div>
+              <div class="youtube-preview">
+                <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+              </div>
+              <div class="url-card-link">
+                <i class="fab fa-youtube"></i>
+                <a href="https://youtu.be/dQw4w9WgXcQ" target="_blank">https://youtu.be/dQw4w9WgXcQ</a>
+              </div>
+              <div class="url-tags">
+                <span class="url-card-tag">개발</span>
+                <span class="url-card-tag">튜토리얼</span>
+                <span class="url-card-tag">가이드</span>
+              </div>
+              <div class="url-card-date">
+                추가일: 2025-05-15
+              </div>
+            </div>
+            
+            <!-- GitHub URL 카드 -->
+            <div class="url-card" data-category="github">
+              <div class="url-card-header">
+                <div class="url-card-title">
+                  <i class="fab fa-github"></i>
+                  오픈소스 프로젝트 관리 시스템
+                </div>
+                <div class="url-card-actions">
+                  <button class="btn btn-sm" title="수정"><i class="fas fa-edit"></i></button>
+                  <button class="btn btn-danger btn-sm" title="삭제"><i class="fas fa-trash"></i></button>
+                </div>
+              </div>
+              <div class="url-card-description">
+                참고할 수 있는 오픈소스 프로젝트 관리 시스템 코드 저장소입니다.
+              </div>
+              <div class="url-card-link">
+                <i class="fab fa-github"></i>
+                <a href="https://github.com/example/project-management" target="_blank">https://github.com/example/project-management</a>
+              </div>
+              <div class="url-tags">
+                <span class="url-card-tag">GitHub</span>
+                <span class="url-card-tag">코드</span>
+                <span class="url-card-tag">오픈소스</span>
+              </div>
+              <div class="url-card-date">
+                추가일: 2025-05-20
+              </div>
+            </div>
+            
+            <!-- 문서 URL 카드 -->
+            <div class="url-card" data-category="document">
+              <div class="url-card-header">
+                <div class="url-card-title">
+                  <i class="fas fa-file-alt"></i>
+                  프로젝트 관리 방법론 문서
+                </div>
+                <div class="url-card-actions">
+                  <button class="btn btn-sm" title="수정"><i class="fas fa-edit"></i></button>
+                  <button class="btn btn-danger btn-sm" title="삭제"><i class="fas fa-trash"></i></button>
+                </div>
+              </div>
+              <div class="url-card-description">
+                효율적인 프로젝트 관리를 위한 방법론 문서입니다.
+              </div>
+              <div class="url-card-link">
+                <i class="far fa-file-pdf"></i>
+                <a href="https://example.com/documents/project-methodology.pdf" target="_blank">https://example.com/documents/project-methodology.pdf</a>
+              </div>
+              <div class="url-tags">
+                <span class="url-card-tag">문서</span>
+                <span class="url-card-tag">방법론</span>
+                <span class="url-card-tag">가이드</span>
+              </div>
+              <div class="url-card-date">
+                추가일: 2025-05-25
+              </div>
+            </div>
+            
+            <!-- API 문서 URL 카드 -->
+            <div class="url-card" data-category="api">
+              <div class="url-card-header">
+                <div class="url-card-title">
+                  <i class="fas fa-code"></i>
+                  프로젝트 관리 API 문서
+                </div>
+                <div class="url-card-actions">
+                  <button class="btn btn-sm" title="수정"><i class="fas fa-edit"></i></button>
+                  <button class="btn btn-danger btn-sm" title="삭제"><i class="fas fa-trash"></i></button>
+                </div>
+              </div>
+              <div class="url-card-description">
+                프로젝트 관리 시스템의 REST API 문서입니다. 외부 시스템 연동 시 참고하세요.
+              </div>
+              <div class="url-card-link">
+                <i class="fas fa-code"></i>
+                <a href="https://api.example.com/docs" target="_blank">https://api.example.com/docs</a>
+              </div>
+              <div class="url-tags">
+                <span class="url-card-tag">API</span>
+                <span class="url-card-tag">문서</span>
+                <span class="url-card-tag">개발</span>
+              </div>
+              <div class="url-card-date">
+                추가일: 2025-06-01
+              </div>
+            </div>
+          </div>
+          
+          <div class="pagination">
+            <button class="btn">&laquo;</button>
+            <button class="btn btn-primary">1</button>
+            <button class="btn">2</button>
+            <button class="btn">&raquo;</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- 푸터 -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>프로젝트 관리 시스템</h3>
+          <p>체계적인 프로젝트 관리를 위한 종합 솔루션</p>
+        </div>
+        <div class="footer-section">
+          <h3>바로가기</h3>
+          <div class="footer-links">
+            <a href="../index.html">홈</a>
+            <a href="../project-list.html">프로젝트 목록</a>
+            <a href="../dashboard.html">대시보드</a>
+            <a href="#">설정</a>
+          </div>
+        </div>
+        <div class="footer-section">
+          <h3>고객지원</h3>
+          <p>이메일: support@projectsystem.co.kr</p>
+          <p>전화: 02-123-4567</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 프로젝트 관리 시스템. All Rights Reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // URL 미리보기 관련 이벤트
+      const urlFetchBtn = document.getElementById('url-fetch-btn');
+      const urlPreview = document.getElementById('url-preview');
+      const urlPreviewContent = document.getElementById('url-preview-content');
+      const urlPreviewClose = document.getElementById('url-preview-close');
+      const urlAddressInput = document.getElementById('url-address');
+      
+      urlFetchBtn.addEventListener('click', function() {
+        const url = urlAddressInput.value.trim();
+        
+        if (!url) {
+          alert('URL을 입력해주세요.');
+          return;
+        }
+        
+        // 실제로는 서버에 URL 정보를 요청해야 하지만, 데모에서는 간단히 처리
+        if (url.includes('youtube.com') || url.includes('youtu.be')) {
+          // 유튜브 URL인 경우
+          const videoId = extractYoutubeVideoId(url);
+          if (videoId) {
+            const previewHtml = `
+              <img src="https://img.youtube.com/vi/${videoId}/0.jpg" alt="유튜브 썸네일" class="url-preview-thumbnail">
+              <h4>유튜브 영상 제목</h4>
+              <p>유튜브 영상 설명이 여기에 표시됩니다. 실제로는 YouTube API를 통해 제목과 설명을 가져와야 합니다.</p>
+            `;
+            urlPreviewContent.innerHTML = previewHtml;
+            urlPreview.style.display = 'block';
+            
+            // 유튜브 카테고리 자동 선택
+            document.getElementById('url-category').value = 'youtube';
+          } else {
+            alert('올바른 유튜브 URL이 아닙니다.');
+          }
+        } else if (url.includes('github.com')) {
+          // GitHub URL인 경우
+          const previewHtml = `
+            <img src="https://public.youware.com/users-website-assets/prod/390865ac-0750-43f9-bbd7-a9ab75350c72/gc25fb92ce03ad72fcc3d7c0c1f9f5cbc4fe3eb0fff9c6b5a8f5aa63e0f9dac21fc4a6d35d44c26d4ba343c2e66edab04e7a54f3fc2a0a0bfa0acbdc8dab22f1_640.png" alt="GitHub 저장소 썸네일" class="url-preview-thumbnail">
+            <h4>GitHub 저장소 이름</h4>
+            <p>GitHub 저장소 설명이 여기에 표시됩니다. 실제로는 GitHub API를 통해 저장소 정보를 가져와야 합니다.</p>
+          `;
+          urlPreviewContent.innerHTML = previewHtml;
+          urlPreview.style.display = 'block';
+          
+          // GitHub 카테고리 자동 선택
+          document.getElementById('url-category').value = 'github';
+        } else {
+          // 일반 웹사이트인 경우
+          const previewHtml = `
+            <img src="https://public.youware.com/users-website-assets/prod/390865ac-0750-43f9-bbd7-a9ab75350c72/g8c25c8af53a6a48cceb9f3dde80bbc07fd7b6e1b16f0e1ec5b4e46df29a98a9ad33fa0dfc051d8b5d0c3ff1eadd96c318efb9e4bd04eb42b26e16eb55faf747_640.png" alt="웹사이트 썸네일" class="url-preview-thumbnail">
+            <h4>웹사이트 제목</h4>
+            <p>웹사이트 설명이 여기에 표시됩니다. 실제로는 메타 태그 등을 통해 페이지 정보를 가져와야 합니다.</p>
+          `;
+          urlPreviewContent.innerHTML = previewHtml;
+          urlPreview.style.display = 'block';
+          
+          // 일반 웹사이트 카테고리 자동 선택
+          const fileExtension = url.split('.').pop().toLowerCase();
+          if (['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'].includes(fileExtension)) {
+            document.getElementById('url-category').value = 'document';
+          } else if (url.includes('api') || url.includes('docs') || url.includes('swagger')) {
+            document.getElementById('url-category').value = 'api';
+          } else {
+            document.getElementById('url-category').value = 'website';
+          }
+        }
+      });
+      
+      urlPreviewClose.addEventListener('click', function() {
+        urlPreview.style.display = 'none';
+      });
+      
+      // URL 카테고리 필터링
+      const categoryItems = document.querySelectorAll('.url-category-item');
+      const urlCards = document.querySelectorAll('.url-card');
+      
+      categoryItems.forEach(item => {
+        item.addEventListener('click', function() {
+          // 기존 active 클래스 제거
+          categoryItems.forEach(i => i.classList.remove('active'));
+          
+          // 클릭한 아이템에 active 클래스 추가
+          this.classList.add('active');
+          
+          // 선택한 카테고리에 맞는 URL 카드만 표시
+          const category = this.dataset.category;
+          
+          urlCards.forEach(card => {
+            if (category === 'all' || card.dataset.category === category) {
+              card.style.display = 'block';
+            } else {
+              card.style.display = 'none';
+            }
+          });
+        });
+      });
+      
+      // URL 추가 버튼 클릭 이벤트
+      document.getElementById('url-add-btn').addEventListener('click', function() {
+        const title = document.getElementById('url-title').value.trim();
+        const url = document.getElementById('url-address').value.trim();
+        const description = document.getElementById('url-description').value.trim();
+        const category = document.getElementById('url-category').value;
+        const tags = document.getElementById('url-tags').value.trim();
+        
+        if (!title || !url) {
+          alert('제목과 URL은 필수 입력 항목입니다.');
+          return;
+        }
+        
+        // 태그 배열 생성
+        const tagArray = tags ? tags.split(',').map(tag => tag.trim()) : [];
+        
+        // 새 URL 카드 HTML 생성
+        let cardHTML = `
+          <div class="url-card" data-category="${category}">
+            <div class="url-card-header">
+              <div class="url-card-title">
+        `;
+        
+        // 카테고리에 따른 아이콘 추가
+        switch (category) {
+          case 'website':
+            cardHTML += `<i class="fas fa-globe"></i>`;
+            break;
+          case 'youtube':
+            cardHTML += `<i class="fab fa-youtube" style="color: #ff0000;"></i>`;
+            break;
+          case 'github':
+            cardHTML += `<i class="fab fa-github"></i>`;
+            break;
+          case 'document':
+            cardHTML += `<i class="fas fa-file-alt"></i>`;
+            break;
+          case 'api':
+            cardHTML += `<i class="fas fa-code"></i>`;
+            break;
+        }
+        
+        cardHTML += `
+                ${title}
+              </div>
+              <div class="url-card-actions">
+                <button class="btn btn-sm" title="수정"><i class="fas fa-edit"></i></button>
+                <button class="btn btn-danger btn-sm" title="삭제"><i class="fas fa-trash"></i></button>
+              </div>
+            </div>
+        `;
+        
+        // 설명이 있는 경우 추가
+        if (description) {
+          cardHTML += `
+            <div class="url-card-description">
+              ${description}
+            </div>
+          `;
+        }
+        
+        // 유튜브 미리보기 (유튜브 URL인 경우)
+        if (category === 'youtube') {
+          const videoId = extractYoutubeVideoId(url);
+          if (videoId) {
+            cardHTML += `
+              <div class="youtube-preview">
+                <iframe src="https://www.youtube.com/embed/${videoId}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+              </div>
+            `;
+          }
+        }
+        
+        // URL 링크 추가
+        cardHTML += `
+          <div class="url-card-link">
+        `;
+        
+        // 카테고리에 따른 아이콘 추가
+        switch (category) {
+          case 'website':
+            cardHTML += `<i class="fas fa-link"></i>`;
+            break;
+          case 'youtube':
+            cardHTML += `<i class="fab fa-youtube"></i>`;
+            break;
+          case 'github':
+            cardHTML += `<i class="fab fa-github"></i>`;
+            break;
+          case 'document':
+            cardHTML += `<i class="far fa-file-pdf"></i>`;
+            break;
+          case 'api':
+            cardHTML += `<i class="fas fa-code"></i>`;
+            break;
+        }
+        
+        cardHTML += `
+            <a href="${url}" target="_blank">${url}</a>
+          </div>
+        `;
+        
+        // 태그가 있는 경우 추가
+        if (tagArray.length > 0) {
+          cardHTML += `<div class="url-tags">`;
+          tagArray.forEach(tag => {
+            cardHTML += `<span class="url-card-tag">${tag}</span>`;
+          });
+          cardHTML += `</div>`;
+        }
+        
+        // 현재 날짜 추가
+        const today = new Date().toISOString().split('T')[0];
+        cardHTML += `
+          <div class="url-card-date">
+            추가일: ${today}
+          </div>
+        </div>
+        `;
+        
+        // URL 목록에 새 카드 추가
+        const urlList = document.getElementById('url-list');
+        urlList.insertAdjacentHTML('afterbegin', cardHTML);
+        
+        // 새로 추가된 카드의 삭제 버튼에 이벤트 리스너 추가
+        const newCard = urlList.querySelector('.url-card:first-child');
+        const deleteBtn = newCard.querySelector('.btn-danger');
+        deleteBtn.addEventListener('click', function() {
+          if (confirm('이 URL을 삭제하시겠습니까?')) {
+            newCard.remove();
+          }
+        });
+        
+        // 폼 초기화
+        document.getElementById('url-title').value = '';
+        document.getElementById('url-address').value = '';
+        document.getElementById('url-description').value = '';
+        document.getElementById('url-tags').value = '';
+        document.getElementById('url-category').value = 'website';
+        urlPreview.style.display = 'none';
+        
+        alert('URL이 성공적으로 추가되었습니다.');
+      });
+      
+      // 삭제 버튼 이벤트
+      document.querySelectorAll('.url-card .btn-danger').forEach(btn => {
+        btn.addEventListener('click', function() {
+          if (confirm('이 URL을 삭제하시겠습니까?')) {
+            this.closest('.url-card').remove();
+          }
+        });
+      });
+      
+      // 검색 기능
+      document.getElementById('url-search-btn').addEventListener('click', function() {
+        const searchText = document.getElementById('url-search').value.toLowerCase();
+        const categoryFilter = document.getElementById('url-filter-category').value;
+        
+        urlCards.forEach(card => {
+          const title = card.querySelector('.url-card-title').textContent.toLowerCase();
+          const link = card.querySelector('.url-card-link a').textContent.toLowerCase();
+          const description = card.querySelector('.url-card-description') ? 
+                              card.querySelector('.url-card-description').textContent.toLowerCase() : '';
+          const category = card.dataset.category;
+          
+          const matchesSearch = !searchText || 
+                               title.includes(searchText) || 
+                               link.includes(searchText) || 
+                               description.includes(searchText);
+          
+          const matchesCategory = !categoryFilter || category === categoryFilter;
+          
+          if (matchesSearch && matchesCategory) {
+            card.style.display = 'block';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+      
+      // 프로젝트 선택 이벤트
+      document.getElementById('project-select').addEventListener('change', function() {
+        if (this.value) {
+          alert('선택한 프로젝트의 참고 URL 목록으로 전환됩니다.');
+        }
+      });
+      
+      // 유튜브 비디오 ID 추출 함수
+      function extractYoutubeVideoId(url) {
+        // 유튜브 URL 패턴 (https://youtu.be/VIDEO_ID 또는 https://www.youtube.com/watch?v=VIDEO_ID)
+        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+        const match = url.match(regExp);
+        
+        return (match && match[2].length === 11) ? match[2] : null;
+      }
+    });
+  </script>
+</body>
+</html>

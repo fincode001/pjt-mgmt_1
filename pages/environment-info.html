@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>환경 정보 관리 - 프로젝트 관리 시스템</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .env-section {
+      margin-bottom: 30px;
+    }
+    
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+    }
+    
+    .env-card {
+      background-color: white;
+      border-radius: 4px;
+      box-shadow: var(--box-shadow);
+      padding: 15px;
+      position: relative;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .env-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+    }
+    
+    .env-card.selected {
+      border: 2px solid var(--secondary-color);
+    }
+    
+    .env-card-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    
+    .env-card-icon {
+      font-size: 1.5rem;
+      color: var(--secondary-color);
+      margin-right: 10px;
+    }
+    
+    .env-card-title {
+      font-weight: 500;
+      font-size: 16px;
+    }
+    
+    .env-card-details {
+      font-size: 14px;
+      color: #666;
+    }
+    
+    .env-card-key {
+      margin-top: 10px;
+      font-family: monospace;
+      font-size: 12px;
+      color: #333;
+      padding: 5px;
+      background-color: #f8f9fa;
+      border-radius: 2px;
+    }
+    
+    .env-card-checkbox {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      height: 18px;
+      width: 18px;
+      cursor: pointer;
+    }
+    
+    .code-preview {
+      background-color: #282c34;
+      color: #abb2bf;
+      font-family: monospace;
+      padding: 15px;
+      border-radius: 4px;
+      overflow-x: auto;
+      margin-bottom: 20px;
+    }
+    
+    .code-preview pre {
+      margin: 0;
+      line-height: 1.5;
+    }
+    
+    .code-line {
+      counter-increment: line;
+      position: relative;
+      display: block;
+    }
+    
+    .code-line::before {
+      content: counter(line);
+      display: inline-block;
+      width: 20px;
+      color: #636d83;
+      text-align: right;
+      margin-right: 10px;
+      user-select: none;
+    }
+    
+    .env-key {
+      color: #e06c75;
+    }
+    
+    .env-value {
+      color: #98c379;
+    }
+    
+    .env-comment {
+      color: #7f848e;
+    }
+    
+    .filter-options {
+      display: flex;
+      margin-bottom: 15px;
+      gap: 15px;
+      align-items: center;
+    }
+    
+    .filter-options .search-box {
+      flex-grow: 1;
+    }
+    
+    .create-env-modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+    
+    .create-env-content {
+      background-color: white;
+      margin: 10% auto;
+      padding: 20px;
+      border-radius: 4px;
+      box-shadow: var(--box-shadow);
+      width: 50%;
+    }
+    
+    .create-env-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    
+    .create-env-header h3 {
+      margin: 0;
+    }
+    
+    .create-env-close {
+      cursor: pointer;
+      font-size: 20px;
+    }
+    
+    .env-form-row {
+      margin-bottom: 15px;
+    }
+  </style>
+</head>
+<body>
+  <!-- 헤더 -->
+  <header>
+    <div class="container header-flex">
+      <div class="logo">
+        <img src="https://public.youware.com/users-website-assets/prod/390865ac-0750-43f9-bbd7-a9ab75350c72/g453cbe7b2f1d85e975cdc6060ff85ce14472a5ceefab7895be5cc34ad7d064edfab33405af6bda843c2f86c256b9dae94e862a1e429c2f867ef976699d1a7b9d_640.jpg" alt="로고">
+        <span>프로젝트 관리 시스템</span>
+      </div>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="../index.html"><i class="fas fa-home"></i> 홈</a></li>
+          <li><a href="../project-list.html"><i class="fas fa-list"></i> 프로젝트 목록</a></li>
+          <li><a href="../dashboard.html"><i class="fas fa-chart-line"></i> 대시보드</a></li>
+          <li><a href="settings.html"><i class="fas fa-cog"></i> 설정</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- 메인 콘텐츠 -->
+  <div class="main-wrapper">
+    <!-- 사이드바 -->
+    <aside class="sidebar">
+      <ul class="sidebar-menu">
+        <li><a href="../index.html"><i class="fas fa-plus-circle"></i> 신규 프로젝트</a></li>
+        <li><a href="../project-list.html"><i class="fas fa-list"></i> 프로젝트 목록</a></li>
+        <li><a href="../dashboard.html"><i class="fas fa-chart-line"></i> 대시보드</a></li>
+        <li><a href="folder-management.html"><i class="fas fa-folder"></i> 작업 폴더 관리</a></li>
+        <li><a href="environment-info.html" class="active"><i class="fas fa-cog"></i> 환경 정보</a></li>
+        <li><a href="reference-url.html"><i class="fas fa-link"></i> 참고 URL 관리</a></li>
+        <li><a href="mcp-servers.html"><i class="fas fa-server"></i> MCP 서버 리스트</a></li>
+        <li><a href="../project-relationship.html"><i class="fas fa-project-diagram"></i> 프로젝트 관계도</a></li>
+        <li><a href="../project-requirements-list.html"><i class="fas fa-comments"></i> 사용자 요구사항</a></li>
+      </ul>
+    </aside>
+
+    <!-- 본문 영역 -->
+    <main class="main-content">
+      <h2>환경 정보 관리</h2>
+      
+      <div class="form-section">
+        <div class="form-header">
+          프로젝트 선택
+        </div>
+        <div class="form-body">
+          <div class="form-group">
+            <select id="project-select" class="form-control">
+              <option value="">프로젝트를 선택하세요</option>
+              <option value="p001">프로젝트 관리 시스템 구축</option>
+              <option value="p002">전자문서 관리 시스템</option>
+              <option value="p003">고객 데이터 분석 시스템</option>
+              <option value="p004">인공지능 챗봇 개발</option>
+              <option value="p005">모바일 앱 리뉴얼</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      
+      <div class="form-section">
+        <div class="form-header">
+          환경 변수 관리
+        </div>
+        <div class="form-body">
+          <div class="filter-options">
+            <div class="search-box">
+              <input type="text" class="form-control" placeholder="키워드로 검색..." id="search-env">
+            </div>
+            <div class="form-group">
+              <select id="env-type-filter" class="form-control">
+                <option value="">모든 유형</option>
+                <option value="db">데이터베이스</option>
+                <option value="api">API</option>
+                <option value="cloud">클라우드</option>
+                <option value="server">서버</option>
+                <option value="etc">기타</option>
+              </select>
+            </div>
+            <button class="btn btn-primary" id="create-env-btn">
+              <i class="fas fa-plus"></i> 새 환경변수
+            </button>
+          </div>
+          
+          <div class="env-section">
+            <h4>데이터베이스 정보</h4>
+            <div class="card-grid">
+              <div class="env-card" data-type="db">
+                <input type="checkbox" class="env-card-checkbox" data-key="DB_HOST">
+                <div class="env-card-header">
+                  <div class="env-card-icon"><i class="fas fa-database"></i></div>
+                  <div class="env-card-title">MySQL 데이터베이스 호스트</div>
+                </div>
+                <div class="env-card-details">
+                  <p>프로덕션 환경의 메인 DB 서버 주소</p>
+                  <div class="env-card-key">DB_HOST=dbserver.example.com</div>
+                </div>
+              </div>
+              
+              <div class="env-card" data-type="db">
+                <input type="checkbox" class="env-card-checkbox" data-key="DB_PORT">
+                <div class="env-card-header">
+                  <div class="env-card-icon"><i class="fas fa-database"></i></div>
+                  <div class="env-card-title">MySQL 포트</div>
+                </div>
+                <div class="env-card-details">
+                  <p>표준 MySQL 포트</p>
+                  <div class="env-card-key">DB_PORT=3306</div>
+                </div>
+              </div>
+              
+              <div class="env-card" data-type="db">
+                <input type="checkbox" class="env-card-checkbox" data-key="DB_NAME">
+                <div class="env-card-header">
+                  <div class="env-card-icon"><i class="fas fa-database"></i></div>
+                  <div class="env-card-title">데이터베이스 이름</div>
+                </div>
+                <div class="env-card-details">
+                  <p>프로젝트 메인 데이터베이스</p>
+                  <div class="env-card-key">DB_NAME=project_management</div>
+                </div>
+              </div>
+              
+              <div class="env-card" data-type="db">
+                <input type="checkbox" class="env-card-checkbox" data-key="DB_USER">
+                <div class="env-card-header">
+                  <div class="env-card-icon"><i class="fas fa-database"></i></div>
+                  <div class="env-card-title">데이터베이스 사용자</div>
+                </div>
+                <div class="env-card-details">
+                  <p>DB 사용자 계정</p>
+                  <div class="env-card-key">DB_USER=project_user</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="env-section">
+            <h4>API 키</h4>
+            <div class="card-grid">
+              <div class="env-card" data-type="api">
+                <input type="checkbox" class="env-card-checkbox" data-key="API_KEY">
+                <div class="env-card-header">
+                  <div class="env-card-icon"><i class="fas fa-key"></i></div>
+                  <div class="env-card-title">OpenAPI 인증키</div>
+                </div>
+                <div class="env-card-details">
+                  <p>외부 OpenAPI 통합용 인증키</p>
+                  <div class="env-card-key">API_KEY=a1b2c3d4e5f6g7h8i9j0</div>
+                </div>
+              </div>
+              
+              <div class="env-card" data-type="api">
+                <input type="checkbox" class="env-card-checkbox" data-key="API_SECRET">
+                <div class="env-card-header">
+                  <div class="env-card-icon"><i class="fas fa-key"></i></div>
+                  <div class="env-card-title">API 시크릿</div>
+                </div>
+                <div class="env-card-details">
+                  <p>외부 OpenAPI 인증 시크릿</p>
+                  <div class="env-card-key">API_SECRET=xyz123_secret_key_456</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="env-section">
+            <h4>클라우드 서비스</h4>
+            <div class="card-grid">
+              <div class="env-card" data-type="cloud">
+                <input type="checkbox" class="env-card-checkbox" data-key="CLOUD_ACCESS_KEY">
+                <div class="env-card-header">
+                  <div class="env-card-icon"><i class="fas fa-cloud"></i></div>
+                  <div class="env-card-title">클라우드 액세스 키</div>
+                </div>
+                <div class="env-card-details">
+                  <p>AWS S3 스토리지 접근 키</p>
+                  <div class="env-card-key">CLOUD_ACCESS_KEY=AKIAXXXXXXXXXXXXXXXX</div>
+                </div>
+              </div>
+              
+              <div class="env-card" data-type="cloud">
+                <input type="checkbox" class="env-card-checkbox" data-key="CLOUD_REGION">
+                <div class="env-card-header">
+                  <div class="env-card-icon"><i class="fas fa-cloud"></i></div>
+                  <div class="env-card-title">클라우드 리전</div>
+                </div>
+                <div class="env-card-details">
+                  <p>AWS 서비스 리전</p>
+                  <div class="env-card-key">CLOUD_REGION=ap-northeast-2</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="env-section">
+            <h4>서버 설정</h4>
+            <div class="card-grid">
+              <div class="env-card" data-type="server">
+                <input type="checkbox" class="env-card-checkbox" data-key="SERVER_PORT">
+                <div class="env-card-header">
+                  <div class="env-card-icon"><i class="fas fa-server"></i></div>
+                  <div class="env-card-title">서버 포트</div>
+                </div>
+                <div class="env-card-details">
+                  <p>웹 서버 리스닝 포트</p>
+                  <div class="env-card-key">SERVER_PORT=8080</div>
+                </div>
+              </div>
+              
+              <div class="env-card" data-type="server">
+                <input type="checkbox" class="env-card-checkbox" data-key="NODE_ENV">
+                <div class="env-card-header">
+                  <div class="env-card-icon"><i class="fas fa-server"></i></div>
+                  <div class="env-card-title">환경 설정</div>
+                </div>
+                <div class="env-card-details">
+                  <p>서버 런타임 환경 설정</p>
+                  <div class="env-card-key">NODE_ENV=production</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="action-buttons">
+            <button class="btn btn-primary" id="generate-env-btn">
+              <i class="fas fa-file-code"></i> .env.sample 파일 생성
+            </button>
+            <button class="btn" id="download-env-btn">
+              <i class="fas fa-download"></i> 다운로드
+            </button>
+          </div>
+          
+          <h4>생성된 .env.sample 파일</h4>
+          <div class="code-preview">
+            <pre><code id="env-file-preview">
+<span class="code-line"><span class="env-comment"># 이 파일은 자동으로 생성된 .env.sample 파일입니다.</span></span>
+<span class="code-line"><span class="env-comment"># 실제 환경에서 사용하기 위해 .env로 복사하고 값을 업데이트하세요.</span></span>
+<span class="code-line"></span>
+<span class="code-line"><span class="env-comment"># 데이터베이스 설정</span></span>
+<span class="code-line"><span class="env-key">DB_HOST</span>=<span class="env-value">dbserver.example.com</span></span>
+<span class="code-line"><span class="env-key">DB_PORT</span>=<span class="env-value">3306</span></span>
+<span class="code-line"><span class="env-key">DB_NAME</span>=<span class="env-value">project_management</span></span>
+<span class="code-line"><span class="env-key">DB_USER</span>=<span class="env-value">project_user</span></span>
+<span class="code-line"><span class="env-key">DB_PASSWORD</span>=<span class="env-value">your_db_password_here</span></span>
+<span class="code-line"></span>
+<span class="code-line"><span class="env-comment"># API 키</span></span>
+<span class="code-line"><span class="env-key">API_KEY</span>=<span class="env-value">your_api_key_here</span></span>
+<span class="code-line"><span class="env-key">API_SECRET</span>=<span class="env-value">your_secret_here</span></span>
+<span class="code-line"></span>
+<span class="code-line"><span class="env-comment"># 서버 설정</span></span>
+<span class="code-line"><span class="env-key">SERVER_PORT</span>=<span class="env-value">8080</span></span>
+<span class="code-line"><span class="env-key">NODE_ENV</span>=<span class="env-value">production</span></span>
+            </code></pre>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- 새 환경변수 생성 모달 -->
+  <div id="create-env-modal" class="create-env-modal">
+    <div class="create-env-content">
+      <div class="create-env-header">
+        <h3>새 환경변수 추가</h3>
+        <span class="create-env-close">&times;</span>
+      </div>
+      <div class="env-form-row">
+        <label>변수 키 (KEY)</label>
+        <input type="text" class="form-control" id="env-key" placeholder="예: API_KEY">
+      </div>
+      <div class="env-form-row">
+        <label>변수 값 (VALUE)</label>
+        <input type="text" class="form-control" id="env-value" placeholder="예: your_api_key_here">
+      </div>
+      <div class="env-form-row">
+        <label>변수 유형</label>
+        <select class="form-control" id="env-type">
+          <option value="db">데이터베이스</option>
+          <option value="api">API</option>
+          <option value="cloud">클라우드</option>
+          <option value="server">서버</option>
+          <option value="etc">기타</option>
+        </select>
+      </div>
+      <div class="env-form-row">
+        <label>설명</label>
+        <textarea class="form-control" id="env-description" rows="3" placeholder="이 환경변수에 대한 설명을 입력하세요"></textarea>
+      </div>
+      <button class="btn btn-primary" id="save-env-btn">저장</button>
+    </div>
+  </div>
+
+  <!-- 푸터 -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>프로젝트 관리 시스템</h3>
+          <p>체계적인 프로젝트 관리를 위한 종합 솔루션</p>
+        </div>
+        <div class="footer-section">
+          <h3>바로가기</h3>
+          <div class="footer-links">
+            <a href="../index.html">홈</a>
+            <a href="../project-list.html">프로젝트 목록</a>
+            <a href="../dashboard.html">대시보드</a>
+            <a href="#">설정</a>
+          </div>
+        </div>
+        <div class="footer-section">
+          <h3>고객지원</h3>
+          <p>이메일: support@projectsystem.co.kr</p>
+          <p>전화: 02-123-4567</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 프로젝트 관리 시스템. All Rights Reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // 환경변수 카드 클릭 이벤트
+      const envCards = document.querySelectorAll('.env-card');
+      envCards.forEach(card => {
+        card.addEventListener('click', function(e) {
+          if (e.target.classList.contains('env-card-checkbox')) {
+            return; // 체크박스 클릭은 카드 선택으로 처리하지 않음
+          }
+          this.classList.toggle('selected');
+        });
+      });
+      
+      // 체크박스 클릭 이벤트
+      const checkboxes = document.querySelectorAll('.env-card-checkbox');
+      checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+          // 부모 카드 요소에 체크 상태 표시
+          const card = this.closest('.env-card');
+          if (this.checked) {
+            card.classList.add('selected');
+          } else {
+            card.classList.remove('selected');
+          }
+          updateEnvFilePreview();
+        });
+      });
+      
+      // 환경변수 파일 생성 버튼 클릭 이벤트
+      document.getElementById('generate-env-btn').addEventListener('click', function() {
+        // 모든 체크박스를 체크 상태로 만들기
+        checkboxes.forEach(checkbox => {
+          checkbox.checked = true;
+          const card = checkbox.closest('.env-card');
+          card.classList.add('selected');
+        });
+        updateEnvFilePreview();
+        
+        // 스크롤을 미리보기로 이동
+        document.querySelector('.code-preview').scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      });
+      
+      // 환경변수 파일 다운로드 버튼 클릭 이벤트
+      document.getElementById('download-env-btn').addEventListener('click', function() {
+        alert('환경변수 파일이 다운로드되었습니다.');
+      });
+      
+      // 검색 기능
+      document.getElementById('search-env').addEventListener('input', function() {
+        const searchValue = this.value.toLowerCase();
+        
+        // 모든 환경변수 카드를 검색어에 맞게 필터링
+        envCards.forEach(card => {
+          const title = card.querySelector('.env-card-title').textContent.toLowerCase();
+          const key = card.querySelector('.env-card-key').textContent.toLowerCase();
+          const details = card.querySelector('.env-card-details p').textContent.toLowerCase();
+          
+          if (title.includes(searchValue) || key.includes(searchValue) || details.includes(searchValue)) {
+            card.style.display = 'block';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+      
+      // 유형별 필터링
+      document.getElementById('env-type-filter').addEventListener('change', function() {
+        const filterValue = this.value;
+        
+        if (!filterValue) {
+          // 필터가 선택되지 않았으면 모든 카드 표시
+          envCards.forEach(card => {
+            card.style.display = 'block';
+          });
+          return;
+        }
+        
+        // 선택된 유형에 맞는 카드만 표시
+        envCards.forEach(card => {
+          if (card.dataset.type === filterValue) {
+            card.style.display = 'block';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+      
+      // 새 환경변수 모달 관련 이벤트
+      const modal = document.getElementById('create-env-modal');
+      const openModalBtn = document.getElementById('create-env-btn');
+      const closeModalBtn = document.querySelector('.create-env-close');
+      
+      openModalBtn.addEventListener('click', function() {
+        modal.style.display = 'block';
+      });
+      
+      closeModalBtn.addEventListener('click', function() {
+        modal.style.display = 'none';
+      });
+      
+      window.addEventListener('click', function(e) {
+        if (e.target === modal) {
+          modal.style.display = 'none';
+        }
+      });
+      
+      // 환경변수 저장 버튼 클릭 이벤트
+      document.getElementById('save-env-btn').addEventListener('click', function() {
+        const envKey = document.getElementById('env-key').value;
+        const envValue = document.getElementById('env-value').value;
+        const envType = document.getElementById('env-type').value;
+        const envDescription = document.getElementById('env-description').value;
+        
+        if (!envKey || !envValue) {
+          alert('변수 키와 값은 필수 입력 항목입니다.');
+          return;
+        }
+        
+        // 아이콘 결정
+        let iconClass = 'fas fa-cog'; // 기본 아이콘
+        switch(envType) {
+          case 'db':
+            iconClass = 'fas fa-database';
+            break;
+          case 'api':
+            iconClass = 'fas fa-key';
+            break;
+          case 'cloud':
+            iconClass = 'fas fa-cloud';
+            break;
+          case 'server':
+            iconClass = 'fas fa-server';
+            break;
+        }
+        
+        // 적절한 섹션 찾기
+        let targetSection;
+        switch(envType) {
+          case 'db':
+            targetSection = document.querySelector('.env-section:nth-of-type(1) .card-grid');
+            break;
+          case 'api':
+            targetSection = document.querySelector('.env-section:nth-of-type(2) .card-grid');
+            break;
+          case 'cloud':
+            targetSection = document.querySelector('.env-section:nth-of-type(3) .card-grid');
+            break;
+          case 'server':
+            targetSection = document.querySelector('.env-section:nth-of-type(4) .card-grid');
+            break;
+          default:
+            // 기타 유형이면 첫 번째 섹션에 추가
+            targetSection = document.querySelector('.env-section:first-of-type .card-grid');
+        }
+        
+        // 새 환경변수 카드 생성
+        const newCard = document.createElement('div');
+        newCard.className = 'env-card';
+        newCard.dataset.type = envType;
+        newCard.innerHTML = `
+          <input type="checkbox" class="env-card-checkbox" data-key="${envKey}">
+          <div class="env-card-header">
+            <div class="env-card-icon"><i class="${iconClass}"></i></div>
+            <div class="env-card-title">${envKey}</div>
+          </div>
+          <div class="env-card-details">
+            <p>${envDescription || '설명 없음'}</p>
+            <div class="env-card-key">${envKey}=${envValue}</div>
+          </div>
+        `;
+        
+        // 새 카드 추가
+        targetSection.appendChild(newCard);
+        
+        // 새 카드에 이벤트 리스너 추가
+        newCard.addEventListener('click', function(e) {
+          if (e.target.classList.contains('env-card-checkbox')) {
+            return;
+          }
+          this.classList.toggle('selected');
+        });
+        
+        const newCheckbox = newCard.querySelector('.env-card-checkbox');
+        newCheckbox.addEventListener('change', function() {
+          if (this.checked) {
+            newCard.classList.add('selected');
+          } else {
+            newCard.classList.remove('selected');
+          }
+          updateEnvFilePreview();
+        });
+        
+        // 모달 닫기
+        modal.style.display = 'none';
+        
+        // 폼 초기화
+        document.getElementById('env-key').value = '';
+        document.getElementById('env-value').value = '';
+        document.getElementById('env-description').value = '';
+        
+        alert('새 환경변수가 추가되었습니다.');
+      });
+      
+      // 환경변수 파일 미리보기 업데이트 함수
+      function updateEnvFilePreview() {
+        const checkedBoxes = document.querySelectorAll('.env-card-checkbox:checked');
+        let envFileContent = `<span class="code-line"><span class="env-comment"># 이 파일은 자동으로 생성된 .env.sample 파일입니다.</span></span>
+<span class="code-line"><span class="env-comment"># 실제 환경에서 사용하기 위해 .env로 복사하고 값을 업데이트하세요.</span></span>
+<span class="code-line"></span>`;
+        
+        // 유형별로 그룹화
+        const groupedEnvVars = {
+          db: [],
+          api: [],
+          cloud: [],
+          server: [],
+          etc: []
+        };
+        
+        // 체크된 환경변수 수집
+        checkedBoxes.forEach(checkbox => {
+          const card = checkbox.closest('.env-card');
+          const key = checkbox.dataset.key;
+          const keyValuePair = card.querySelector('.env-card-key').textContent;
+          const type = card.dataset.type || 'etc';
+          
+          groupedEnvVars[type].push({
+            key,
+            keyValuePair
+          });
+        });
+        
+        // 데이터베이스 설정
+        if (groupedEnvVars.db.length > 0) {
+          envFileContent += `<span class="code-line"><span class="env-comment"># 데이터베이스 설정</span></span>`;
+          groupedEnvVars.db.forEach(item => {
+            const [key, value] = item.keyValuePair.split('=');
+            envFileContent += `<span class="code-line"><span class="env-key">${key}</span>=<span class="env-value">${value}</span></span>`;
+          });
+          envFileContent += `<span class="code-line"></span>`;
+        }
+        
+        // API 키
+        if (groupedEnvVars.api.length > 0) {
+          envFileContent += `<span class="code-line"><span class="env-comment"># API 키</span></span>`;
+          groupedEnvVars.api.forEach(item => {
+            const [key, value] = item.keyValuePair.split('=');
+            envFileContent += `<span class="code-line"><span class="env-key">${key}</span>=<span class="env-value">${value}</span></span>`;
+          });
+          envFileContent += `<span class="code-line"></span>`;
+        }
+        
+        // 클라우드 설정
+        if (groupedEnvVars.cloud.length > 0) {
+          envFileContent += `<span class="code-line"><span class="env-comment"># 클라우드 서비스 설정</span></span>`;
+          groupedEnvVars.cloud.forEach(item => {
+            const [key, value] = item.keyValuePair.split('=');
+            envFileContent += `<span class="code-line"><span class="env-key">${key}</span>=<span class="env-value">${value}</span></span>`;
+          });
+          envFileContent += `<span class="code-line"></span>`;
+        }
+        
+        // 서버 설정
+        if (groupedEnvVars.server.length > 0) {
+          envFileContent += `<span class="code-line"><span class="env-comment"># 서버 설정</span></span>`;
+          groupedEnvVars.server.forEach(item => {
+            const [key, value] = item.keyValuePair.split('=');
+            envFileContent += `<span class="code-line"><span class="env-key">${key}</span>=<span class="env-value">${value}</span></span>`;
+          });
+          envFileContent += `<span class="code-line"></span>`;
+        }
+        
+        // 기타 설정
+        if (groupedEnvVars.etc.length > 0) {
+          envFileContent += `<span class="code-line"><span class="env-comment"># 기타 설정</span></span>`;
+          groupedEnvVars.etc.forEach(item => {
+            const [key, value] = item.keyValuePair.split('=');
+            envFileContent += `<span class="code-line"><span class="env-key">${key}</span>=<span class="env-value">${value}</span></span>`;
+          });
+        }
+        
+        // 미리보기 업데이트
+        document.getElementById('env-file-preview').innerHTML = envFileContent;
+      }
+      
+      // 프로젝트 선택 이벤트
+      document.getElementById('project-select').addEventListener('change', function() {
+        if (this.value) {
+          alert('선택한 프로젝트의 환경 정보로 전환됩니다.');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

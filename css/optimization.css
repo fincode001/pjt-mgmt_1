@@ -1,0 +1,465 @@
+/* Optimization CSS for Project Management System */
+
+:root {
+  --primary: #3498db;
+  --primary-dark: #2980b9;
+  --secondary: #2c3e50;
+  --success: #27ae60;
+  --warning: #f39c12;
+  --danger: #e74c3c;
+  --light: #ecf0f1;
+  --dark: #34495e;
+  --gray: #95a5a6;
+  --gray-light: #f5f7fa;
+  --border-radius: 4px;
+  --box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s ease;
+}
+
+/* Enhanced Form Elements */
+.enhanced-form .form-section {
+  margin-bottom: 1.5rem;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: var(--box-shadow);
+  background-color: #fff;
+  transition: var(--transition);
+}
+
+.enhanced-form .form-section:hover {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.enhanced-form .form-header {
+  background-color: var(--secondary);
+  color: white;
+  padding: 0.8rem 1.2rem;
+  font-weight: 500;
+  font-size: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.enhanced-form .form-header .header-icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+}
+
+.enhanced-form .form-body {
+  padding: 1.5rem;
+}
+
+.enhanced-form .form-section.collapsed .form-body {
+  display: none;
+}
+
+.enhanced-form .toggle-section {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+
+/* Step Indicator */
+.form-steps {
+  display: flex;
+  margin-bottom: 2rem;
+  overflow-x: auto;
+  padding-bottom: 10px;
+}
+
+.form-step {
+  flex: 1;
+  text-align: center;
+  position: relative;
+  padding: 10px 5px;
+}
+
+.form-step::after {
+  content: '';
+  position: absolute;
+  top: 25px;
+  left: 50%;
+  width: 100%;
+  height: 3px;
+  background-color: var(--gray);
+  z-index: 1;
+}
+
+.form-step:last-child::after {
+  display: none;
+}
+
+.step-number {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background-color: var(--gray);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 10px;
+  position: relative;
+  z-index: 2;
+}
+
+.form-step.active .step-number {
+  background-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+}
+
+.form-step.completed .step-number {
+  background-color: var(--success);
+}
+
+.step-label {
+  font-size: 0.85rem;
+  color: var(--gray);
+  white-space: nowrap;
+}
+
+.form-step.active .step-label {
+  color: var(--primary);
+  font-weight: 500;
+}
+
+.form-step.completed .step-label {
+  color: var(--success);
+}
+
+/* Enhanced Rating Stars */
+.rating-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.rating-label {
+  min-width: 120px;
+  margin-right: 15px;
+  font-weight: 500;
+}
+
+.rating-stars {
+  display: flex;
+  gap: 5px;
+}
+
+.rating-value {
+  width: 50px;
+  height: 50px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 1.5rem;
+  position: relative;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.rating-value:hover {
+  transform: scale(1.1);
+}
+
+.rating-value-1 { background-color: #E8F8F5; color: #17A589; }
+.rating-value-2 { background-color: #D4EFDF; color: #27AE60; }
+.rating-value-3 { background-color: #FCF3CF; color: #F39C12; }
+.rating-value-4 { background-color: #FADBD8; color: #E74C3C; }
+.rating-value-5 { background-color: #F5B7B1; color: #C0392B; }
+
+.rating-value.selected::after {
+  content: "✓";
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: var(--success);
+  border: 2px solid var(--success);
+}
+
+/* Enhanced Progress Bar */
+.progress-container {
+  margin-bottom: 1.5rem;
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.progress-title {
+  font-weight: 500;
+  color: var(--dark);
+}
+
+.progress-value {
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.enhanced-progress {
+  height: 15px;
+  background-color: var(--gray-light);
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-bar {
+  height: 100%;
+  background-color: var(--primary);
+  border-radius: 10px;
+  transition: width 0.6s ease;
+}
+
+.progress-comparison {
+  display: flex;
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.progress-comparison span {
+  flex: 1;
+}
+
+.progress-comparison .progress-actual {
+  color: var(--primary);
+  font-weight: 500;
+}
+
+.progress-comparison .progress-expected {
+  text-align: right;
+  color: var(--danger);
+  font-weight: 500;
+}
+
+/* Project Status Selector */
+.status-selector {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.status-option {
+  flex: 1;
+  min-width: 100px;
+  border: 1px solid var(--gray);
+  border-radius: 4px;
+  padding: 10px 5px;
+  text-align: center;
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+}
+
+.status-option:hover {
+  border-color: var(--primary);
+}
+
+.status-option.selected {
+  border-width: 2px;
+}
+
+.status-option input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.status-icon {
+  font-size: 1.5rem;
+  margin-bottom: 5px;
+}
+
+.status-label {
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.status-not-started {
+  color: var(--gray);
+}
+
+.status-not-started.selected {
+  border-color: var(--gray);
+  background-color: rgba(149, 165, 166, 0.1);
+}
+
+.status-in-progress {
+  color: var(--primary);
+}
+
+.status-in-progress.selected {
+  border-color: var(--primary);
+  background-color: rgba(52, 152, 219, 0.1);
+}
+
+.status-on-hold {
+  color: var(--warning);
+}
+
+.status-on-hold.selected {
+  border-color: var(--warning);
+  background-color: rgba(243, 156, 18, 0.1);
+}
+
+.status-completed {
+  color: var(--success);
+}
+
+.status-completed.selected {
+  border-color: var(--success);
+  background-color: rgba(39, 174, 96, 0.1);
+}
+
+/* File Upload Enhancements */
+.enhanced-upload-area {
+  border: 2px dashed var(--gray);
+  border-radius: var(--border-radius);
+  padding: 2rem 1rem;
+  text-align: center;
+  cursor: pointer;
+  transition: var(--transition);
+  background-color: var(--gray-light);
+}
+
+.enhanced-upload-area:hover {
+  border-color: var(--primary);
+  background-color: rgba(52, 152, 219, 0.05);
+}
+
+.enhanced-upload-area .upload-icon {
+  font-size: 2.5rem;
+  color: var(--primary);
+  margin-bottom: 1rem;
+}
+
+.enhanced-upload-area .upload-title {
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.enhanced-upload-area .upload-description {
+  color: var(--gray);
+  margin-bottom: 1rem;
+}
+
+.file-list {
+  margin-top: 1rem;
+}
+
+.file-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: var(--gray-light);
+  border-radius: var(--border-radius);
+  margin-bottom: 5px;
+}
+
+.file-item:hover {
+  background-color: rgba(52, 152, 219, 0.1);
+}
+
+.file-icon {
+  margin-right: 10px;
+  color: var(--primary);
+}
+
+.file-name {
+  flex-grow: 1;
+}
+
+.file-size {
+  color: var(--gray);
+  margin-right: 10px;
+  font-size: 0.85rem;
+}
+
+.file-remove {
+  color: var(--danger);
+  cursor: pointer;
+  padding: 5px;
+}
+
+/* Enhanced Navigation Button */
+.form-navigation {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+}
+
+.btn-prev {
+  background-color: var(--light);
+  color: var(--dark);
+}
+
+.btn-next, .btn-submit {
+  background-color: var(--primary);
+  color: white;
+}
+
+.btn-next:hover, .btn-submit:hover {
+  background-color: var(--primary-dark);
+}
+
+/* Responsive Enhancements */
+@media (max-width: 768px) {
+  .form-steps {
+    padding-bottom: 5px;
+  }
+  
+  .step-label {
+    font-size: 0.75rem;
+  }
+  
+  .rating-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .rating-label {
+    margin-bottom: 10px;
+    margin-right: 0;
+  }
+  
+  .status-selector {
+    flex-direction: column;
+  }
+  
+  .status-option {
+    display: flex;
+    align-items: center;
+  }
+  
+  .status-icon {
+    margin-right: 10px;
+    margin-bottom: 0;
+  }
+}
+
+/* Animation effects */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.fadeIn {
+  animation: fadeIn 0.5s ease-in;
+}

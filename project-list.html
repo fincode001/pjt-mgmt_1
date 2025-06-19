@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>프로젝트 목록 - 프로젝트 관리 시스템</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .project-list {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    
+    .project-list th, .project-list td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    
+    .project-list th {
+      background-color: #f8f9fa;
+      font-weight: 500;
+    }
+    
+    .project-list tr:hover {
+      background-color: #f5f5f5;
+    }
+    
+    .status-badge {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 500;
+      display: inline-block;
+      color: white;
+    }
+    
+    .status-not-started { background-color: #6c757d; }
+    .status-in-progress { background-color: #007bff; }
+    .status-on-hold { background-color: #ffc107; color: #212529; }
+    .status-completed { background-color: #28a745; }
+    
+    .list-actions {
+      display: flex;
+      gap: 5px;
+    }
+    
+    .search-filters {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    
+    .search-filters .form-group {
+      margin-bottom: 0;
+    }
+  </style>
+</head>
+<body>
+  <!-- 헤더 -->
+  <header>
+    <div class="container header-flex">
+      <div class="logo">
+        <img src="https://public.youware.com/users-website-assets/prod/390865ac-0750-43f9-bbd7-a9ab75350c72/g453cbe7b2f1d85e975cdc6060ff85ce14472a5ceefab7895be5cc34ad7d064edfab33405af6bda843c2f86c256b9dae94e862a1e429c2f867ef976699d1a7b9d_640.jpg" alt="로고">
+        <span>프로젝트 관리 시스템</span>
+      </div>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.html"><i class="fas fa-home"></i> 홈</a></li>
+          <li><a href="project-list.html" class="active"><i class="fas fa-list"></i> 프로젝트 목록</a></li>
+          <li><a href="dashboard.html"><i class="fas fa-chart-line"></i> 대시보드</a></li>
+          <li><a href="pages/settings.html"><i class="fas fa-cog"></i> 설정</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- 메인 콘텐츠 -->
+  <div class="main-wrapper">
+    <!-- 사이드바 -->
+    <aside class="sidebar">
+      <ul class="sidebar-menu">
+        <li><a href="index.html"><i class="fas fa-plus-circle"></i> 신규 프로젝트</a></li>
+        <li><a href="project-list.html" class="active"><i class="fas fa-list"></i> 프로젝트 목록</a></li>
+        <li><a href="dashboard.html"><i class="fas fa-chart-line"></i> 대시보드</a></li>
+        <li><a href="pages/folder-management.html"><i class="fas fa-folder"></i> 작업 폴더 관리</a></li>
+        <li><a href="pages/environment-info.html"><i class="fas fa-cog"></i> 환경 정보</a></li>
+        <li><a href="pages/reference-url.html"><i class="fas fa-link"></i> 참고 URL 관리</a></li>
+        <li><a href="pages/mcp-servers.html"><i class="fas fa-server"></i> MCP 서버 리스트</a></li>
+        <li><a href="project-relationship.html"><i class="fas fa-project-diagram"></i> 프로젝트 관계도</a></li>
+        <li><a href="project-requirements-list.html"><i class="fas fa-comments"></i> 사용자 요구사항</a></li>
+      </ul>
+    </aside>
+
+    <!-- 본문 영역 -->
+    <main class="main-content">
+      <h2>프로젝트 목록</h2>
+      <div class="text-right mb-10">
+        <a href="project-list-priority.html" class="btn btn-primary">
+          <i class="fas fa-sort"></i> 우선순위 관리
+        </a>
+      </div>
+
+      <!-- 검색 및 필터 -->
+      <div class="form-section">
+        <div class="form-body">
+          <div class="search-filters">
+            <div class="form-group">
+              <input type="text" class="form-control" placeholder="프로젝트명 검색">
+            </div>
+            <div class="form-group">
+              <select class="form-control">
+                <option value="">모든 상태</option>
+                <option value="not-started">미착수</option>
+                <option value="in-progress">진행중</option>
+                <option value="on-hold">보류중단</option>
+                <option value="completed">종료</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <select class="form-control">
+                <option value="all">모든 중요도</option>
+                <option value="5">중요도 5</option>
+                <option value="4">중요도 4+</option>
+                <option value="3">중요도 3+</option>
+                <option value="2">중요도 2+</option>
+                <option value="1">중요도 1+</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <select class="form-control">
+                <option value="all">모든 긴급도</option>
+                <option value="5">긴급도 5</option>
+                <option value="4">긴급도 4+</option>
+                <option value="3">긴급도 3+</option>
+                <option value="2">긴급도 2+</option>
+                <option value="1">긴급도 1+</option>
+              </select>
+            </div>
+            <button class="btn btn-primary">
+              <i class="fas fa-search"></i> 검색
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 프로젝트 목록 테이블 -->
+      <div class="form-section">
+        <div class="form-body">
+          <table class="project-list">
+            <thead>
+              <tr>
+                <th>프로젝트 코드</th>
+                <th>프로젝트명</th>
+                <th>상태</th>
+                <th>중요도</th>
+                <th>긴급도</th>
+                <th>진척률</th>
+                <th>일정 경과율</th>
+                <th>일정</th>
+                <th>작업</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>2025-A-01-001-Ver0.1</td>
+                <td><span class="project-name" data-project-id="p001">프로젝트 관리 시스템 구축</span></td>
+                <td><span class="status-badge status-in-progress">진행중</span></td>
+                <td>★★★★★</td>
+                <td>★★★★☆</td>
+                <td>75%</td>
+                <td>65%</td>
+                <td>2025-05-15 ~ 2025-06-30</td>
+                <td>
+                  <div class="list-actions">
+                    <button class="btn btn-sm" title="보기"><i class="fas fa-eye"></i></button>
+                    <button class="btn btn-sm btn-primary" title="수정"><i class="fas fa-edit"></i></button>
+                    <button class="btn btn-sm btn-danger" title="삭제"><i class="fas fa-trash"></i></button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>2025-A-02-001-Ver0.1</td>
+                <td><span class="project-name" data-project-id="p002">전자문서 관리 시스템</span></td>
+                <td><span class="status-badge status-not-started">미착수</span></td>
+                <td>★★★☆☆</td>
+                <td>★★☆☆☆</td>
+                <td>0%</td>
+                <td>0%</td>
+                <td>2025-06-10 ~ 2025-07-20</td>
+                <td>
+                  <div class="list-actions">
+                    <button class="btn btn-sm" title="보기"><i class="fas fa-eye"></i></button>
+                    <button class="btn btn-sm btn-primary" title="수정"><i class="fas fa-edit"></i></button>
+                    <button class="btn btn-sm btn-danger" title="삭제"><i class="fas fa-trash"></i></button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>2025-B-01-002-Ver1.3</td>
+                <td><span class="project-name" data-project-id="p003">고객 데이터 분석 시스템</span></td>
+                <td><span class="status-badge status-completed">종료</span></td>
+                <td>★★★★☆</td>
+                <td>★★★★★</td>
+                <td>100%</td>
+                <td>100%</td>
+                <td>2025-04-01 ~ 2025-05-15</td>
+                <td>
+                  <div class="list-actions">
+                    <button class="btn btn-sm" title="보기"><i class="fas fa-eye"></i></button>
+                    <button class="btn btn-sm btn-primary" title="수정"><i class="fas fa-edit"></i></button>
+                    <button class="btn btn-sm btn-danger" title="삭제"><i class="fas fa-trash"></i></button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>2025-C-03-001-Ver0.2</td>
+                <td><span class="project-name" data-project-id="p004">인공지능 챗봇 개발</span></td>
+                <td><span class="status-badge status-on-hold">보류중단</span></td>
+                <td>★★★★☆</td>
+                <td>★★★☆☆</td>
+                <td>45%</td>
+                <td>70%</td>
+                <td>2025-03-10 ~ 2025-06-10</td>
+                <td>
+                  <div class="list-actions">
+                    <button class="btn btn-sm" title="보기"><i class="fas fa-eye"></i></button>
+                    <button class="btn btn-sm btn-primary" title="수정"><i class="fas fa-edit"></i></button>
+                    <button class="btn btn-sm btn-danger" title="삭제"><i class="fas fa-trash"></i></button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>2025-B-02-003-Ver0.5</td>
+                <td><span class="project-name" data-project-id="p005">모바일 앱 리뉴얼</span></td>
+                <td><span class="status-badge status-in-progress">진행중</span></td>
+                <td>★★★☆☆</td>
+                <td>★★★★☆</td>
+                <td>30%</td>
+                <td>25%</td>
+                <td>2025-05-25 ~ 2025-07-10</td>
+                <td>
+                  <div class="list-actions">
+                    <button class="btn btn-sm" title="보기"><i class="fas fa-eye"></i></button>
+                    <button class="btn btn-sm btn-primary" title="수정"><i class="fas fa-edit"></i></button>
+                    <button class="btn btn-sm btn-danger" title="삭제"><i class="fas fa-trash"></i></button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          
+          <!-- 페이지네이션 -->
+          <div class="text-center">
+            <button class="btn">&laquo;</button>
+            <button class="btn btn-primary">1</button>
+            <button class="btn">2</button>
+            <button class="btn">3</button>
+            <button class="btn">&raquo;</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- 푸터 -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>프로젝트 관리 시스템</h3>
+          <p>체계적인 프로젝트 관리를 위한 종합 솔루션</p>
+        </div>
+        <div class="footer-section">
+          <h3>바로가기</h3>
+          <div class="footer-links">
+            <a href="index.html">홈</a>
+            <a href="project-list.html">프로젝트 목록</a>
+            <a href="dashboard.html">대시보드</a>
+            <a href="#">설정</a>
+          </div>
+        </div>
+        <div class="footer-section">
+          <h3>고객지원</h3>
+          <p>이메일: support@projectsystem.co.kr</p>
+          <p>전화: 02-123-4567</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 프로젝트 관리 시스템. All Rights Reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/project-list-detail.js"></script>
+</body>
+</html>

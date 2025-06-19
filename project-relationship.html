@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>프로젝트 관계도 - 프로젝트 관리 시스템</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    #mindmap-container {
+      width: 100%;
+      height: 600px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+      background-color: #f9f9f9;
+    }
+    
+    .node {
+      position: absolute;
+      background-color: white;
+      border: 2px solid #3498db;
+      border-radius: 8px;
+      padding: 10px 15px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      min-width: 150px;
+      text-align: center;
+      cursor: default;
+      font-weight: 500;
+      z-index: 10;
+    }
+    
+    .node.main {
+      background-color: #3498db;
+      color: white;
+      border-color: #2980b9;
+      font-weight: 700;
+    }
+    
+    .node.upper {
+      border-color: #e74c3c;
+    }
+    
+    .node.middle {
+      border-color: #f39c12;
+    }
+    
+    .node.lower {
+      border-color: #2ecc71;
+    }
+    
+    .connection {
+      position: absolute;
+      background-color: #95a5a6;
+      height: 2px;
+      transform-origin: left center;
+      z-index: 5;
+    }
+    
+    .connection-label {
+      position: absolute;
+      background-color: white;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 12px;
+      white-space: nowrap;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      z-index: 6;
+    }
+    
+    .legend {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    
+    .legend-color {
+      width: 15px;
+      height: 15px;
+      border-radius: 3px;
+    }
+    
+    .filters {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <!-- 헤더 -->
+  <header>
+    <div class="container header-flex">
+      <div class="logo">
+        <img src="https://public.youware.com/users-website-assets/prod/390865ac-0750-43f9-bbd7-a9ab75350c72/g453cbe7b2f1d85e975cdc6060ff85ce14472a5ceefab7895be5cc34ad7d064edfab33405af6bda843c2f86c256b9dae94e862a1e429c2f867ef976699d1a7b9d_640.jpg" alt="로고">
+        <span>프로젝트 관리 시스템</span>
+      </div>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.html"><i class="fas fa-home"></i> 홈</a></li>
+          <li><a href="project-list.html"><i class="fas fa-list"></i> 프로젝트 목록</a></li>
+          <li><a href="dashboard.html"><i class="fas fa-chart-line"></i> 대시보드</a></li>
+          <li><a href="pages/settings.html"><i class="fas fa-cog"></i> 설정</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- 메인 콘텐츠 -->
+  <div class="main-wrapper">
+    <!-- 사이드바 -->
+    <aside class="sidebar">
+      <ul class="sidebar-menu">
+        <li><a href="index.html"><i class="fas fa-plus-circle"></i> 신규 프로젝트</a></li>
+        <li><a href="project-list.html"><i class="fas fa-list"></i> 프로젝트 목록</a></li>
+        <li><a href="dashboard.html"><i class="fas fa-chart-line"></i> 대시보드</a></li>
+        <li><a href="pages/folder-management.html"><i class="fas fa-folder"></i> 작업 폴더 관리</a></li>
+        <li><a href="pages/environment-info.html"><i class="fas fa-cog"></i> 환경 정보</a></li>
+        <li><a href="pages/reference-url.html"><i class="fas fa-link"></i> 참고 URL 관리</a></li>
+        <li><a href="pages/mcp-servers.html"><i class="fas fa-server"></i> MCP 서버 리스트</a></li>
+        <li><a href="project-relationship.html" class="active"><i class="fas fa-project-diagram"></i> 프로젝트 관계도</a></li>
+        <li><a href="project-requirements-list.html"><i class="fas fa-comments"></i> 사용자 요구사항</a></li>
+      </ul>
+    </aside>
+
+    <!-- 본문 영역 -->
+    <main class="main-content">
+      <h2>프로젝트 관계도</h2>
+      
+      <!-- 범례 -->
+      <div class="form-section">
+        <div class="form-header">
+          관계도 범례
+        </div>
+        <div class="form-body">
+          <div class="legend">
+            <div class="legend-item">
+              <div class="legend-color" style="background-color: #3498db;"></div>
+              <span>메인 프로젝트</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-color" style="background-color: white; border: 2px solid #e74c3c;"></div>
+              <span>상위 관계 (상)</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-color" style="background-color: white; border: 2px solid #f39c12;"></div>
+              <span>중간 관계 (중)</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-color" style="background-color: white; border: 2px solid #2ecc71;"></div>
+              <span>하위 관계 (하)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 필터 -->
+      <div class="form-section">
+        <div class="form-header">
+          필터링
+        </div>
+        <div class="form-body">
+          <div class="filters">
+            <select class="form-control" id="project-filter">
+              <option value="프로젝트 관리 시스템 구축">프로젝트 관리 시스템 구축</option>
+              <option value="전자문서 관리 시스템">전자문서 관리 시스템</option>
+              <option value="고객 데이터 분석 시스템">고객 데이터 분석 시스템</option>
+              <option value="인공지능 챗봇 개발">인공지능 챗봇 개발</option>
+              <option value="모바일 앱 리뉴얼">모바일 앱 리뉴얼</option>
+            </select>
+            <button type="button" class="btn btn-primary" onclick="updateMindmap()">
+              <i class="fas fa-search"></i> 적용
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 마인드맵 -->
+      <div class="form-section">
+        <div class="form-body">
+          <div id="mindmap-container"></div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- 푸터 -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>프로젝트 관리 시스템</h3>
+          <p>체계적인 프로젝트 관리를 위한 종합 솔루션</p>
+        </div>
+        <div class="footer-section">
+          <h3>바로가기</h3>
+          <div class="footer-links">
+            <a href="index.html">홈</a>
+            <a href="project-list.html">프로젝트 목록</a>
+            <a href="dashboard.html">대시보드</a>
+            <a href="#">설정</a>
+          </div>
+        </div>
+        <div class="footer-section">
+          <h3>고객지원</h3>
+          <p>이메일: support@projectsystem.co.kr</p>
+          <p>전화: 02-123-4567</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 프로젝트 관리 시스템. All Rights Reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+    // 프로젝트 관계도 데이터
+    const projectRelationships = {
+      "프로젝트 관리 시스템 구축": [
+        { project: "전자문서 관리 시스템", level: "상", description: "문서 관리 기능 연계" },
+        { project: "인공지능 챗봇 개발", level: "중", description: "사용자 지원 기능" },
+        { project: "모바일 앱 리뉴얼", level: "하", description: "모바일 접근성 지원" }
+      ],
+      "전자문서 관리 시스템": [
+        { project: "프로젝트 관리 시스템 구축", level: "중", description: "프로젝트 문서 연동" },
+        { project: "고객 데이터 분석 시스템", level: "중", description: "문서 데이터 분석" }
+      ],
+      "고객 데이터 분석 시스템": [
+        { project: "인공지능 챗봇 개발", level: "상", description: "고객 데이터 활용" },
+        { project: "모바일 앱 리뉴얼", level: "중", description: "사용자 행동 데이터 분석" }
+      ],
+      "인공지능 챗봇 개발": [
+        { project: "고객 데이터 분석 시스템", level: "하", description: "데이터 소스 활용" },
+        { project: "프로젝트 관리 시스템 구축", level: "중", description: "프로젝트 상태 조회" }
+      ],
+      "모바일 앱 리뉴얼": [
+        { project: "프로젝트 관리 시스템 구축", level: "상", description: "프로젝트 상태 모니터링" },
+        { project: "고객 데이터 분석 시스템", level: "중", description: "사용자 행동 분석" }
+      ]
+    };
+    
+    // 마인드맵 생성 함수
+    function updateMindmap() {
+      const container = document.getElementById('mindmap-container');
+      const projectFilter = document.getElementById('project-filter');
+      const mainProject = projectFilter.value;
+      
+      // 컨테이너 초기화
+      container.innerHTML = '';
+      
+      // 메인 노드 생성
+      const mainNode = document.createElement('div');
+      mainNode.className = 'node main';
+      mainNode.textContent = mainProject;
+      mainNode.style.top = '250px';
+      mainNode.style.left = '375px';
+      container.appendChild(mainNode);
+      
+      // 관계된 프로젝트 노드 생성
+      const relationships = projectRelationships[mainProject] || [];
+      const nodeDistance = 200;
+      
+      relationships.forEach((rel, index) => {
+        // 관련 프로젝트 노드 생성
+        const relatedNode = document.createElement('div');
+        relatedNode.className = `node ${rel.level === "상" ? "upper" : rel.level === "중" ? "middle" : "lower"}`;
+        relatedNode.textContent = rel.project;
+        
+        // 위치 계산 (원형으로 배치)
+        const angle = (Math.PI * 2 / relationships.length) * index - Math.PI / 2;
+        const x = 375 + Math.cos(angle) * nodeDistance;
+        const y = 250 + Math.sin(angle) * nodeDistance;
+        
+        relatedNode.style.top = `${y}px`;
+        relatedNode.style.left = `${x}px`;
+        container.appendChild(relatedNode);
+        
+        // 연결선 생성
+        const connection = document.createElement('div');
+        connection.className = 'connection';
+        
+        // 연결선 위치 및 길이, 각도 계산
+        const mainRect = mainNode.getBoundingClientRect();
+        const relRect = relatedNode.getBoundingClientRect();
+        
+        const dx = x - 375;
+        const dy = y - 250;
+        const length = Math.sqrt(dx * dx + dy * dy);
+        const angle2 = Math.atan2(dy, dx) * 180 / Math.PI;
+        
+        connection.style.width = `${length}px`;
+        connection.style.transform = `rotate(${angle2}deg)`;
+        connection.style.top = '250px';
+        connection.style.left = '375px';
+        container.appendChild(connection);
+        
+        // 연결선 라벨 생성
+        const connectionLabel = document.createElement('div');
+        connectionLabel.className = 'connection-label';
+        connectionLabel.textContent = rel.description;
+        
+        // 라벨 위치 계산 (선의 중간)
+        const labelX = 375 + Math.cos(angle) * (nodeDistance / 2);
+        const labelY = 250 + Math.sin(angle) * (nodeDistance / 2);
+        
+        connectionLabel.style.top = `${labelY}px`;
+        connectionLabel.style.left = `${labelX}px`;
+        container.appendChild(connectionLabel);
+      });
+    }
+    
+    // 페이지 로드 시 마인드맵 초기화
+    document.addEventListener('DOMContentLoaded', function() {
+      updateMindmap();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>요구사항 등록 - 프로젝트 관리 시스템</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/requirements.css">
+</head>
+<body>
+  <!-- 헤더 -->
+  <header>
+    <div class="container header-flex">
+      <div class="logo">
+        <img src="https://public.youware.com/users-website-assets/prod/390865ac-0750-43f9-bbd7-a9ab75350c72/g453cbe7b2f1d85e975cdc6060ff85ce14472a5ceefab7895be5cc34ad7d064edfab33405af6bda843c2f86c256b9dae94e862a1e429c2f867ef976699d1a7b9d_640.jpg" alt="로고">
+        <span>프로젝트 관리 시스템</span>
+      </div>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.html"><i class="fas fa-home"></i> 홈</a></li>
+          <li><a href="project-list.html"><i class="fas fa-list"></i> 프로젝트 목록</a></li>
+          <li><a href="dashboard.html"><i class="fas fa-chart-line"></i> 대시보드</a></li>
+          <li><a href="pages/settings.html"><i class="fas fa-cog"></i> 설정</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- 메인 콘텐츠 -->
+  <div class="main-wrapper">
+    <!-- 사이드바 -->
+    <aside class="sidebar">
+      <ul class="sidebar-menu">
+        <li><a href="index.html"><i class="fas fa-plus-circle"></i> 신규 프로젝트</a></li>
+        <li><a href="project-list.html"><i class="fas fa-list"></i> 프로젝트 목록</a></li>
+        <li><a href="dashboard.html"><i class="fas fa-chart-line"></i> 대시보드</a></li>
+        <li><a href="pages/folder-management.html"><i class="fas fa-folder"></i> 작업 폴더 관리</a></li>
+        <li><a href="pages/environment-info.html"><i class="fas fa-cog"></i> 환경 정보</a></li>
+        <li><a href="pages/reference-url.html"><i class="fas fa-link"></i> 참고 URL 관리</a></li>
+        <li><a href="pages/mcp-servers.html"><i class="fas fa-server"></i> MCP 서버 리스트</a></li>
+        <li><a href="project-relationship.html"><i class="fas fa-project-diagram"></i> 프로젝트 관계도</a></li>
+        <li><a href="project-requirements-list.html" class="active"><i class="fas fa-comments"></i> 사용자 요구사항</a></li>
+      </ul>
+    </aside>
+
+    <!-- 본문 영역 -->
+    <main class="main-content">
+      <a href="project-requirements-list.html" class="back-to-list"><i class="fas fa-arrow-left"></i> 요구사항 목록으로 돌아가기</a>
+      
+      <div class="form-section">
+        <div class="form-header">
+          <span><i class="fas fa-edit"></i> 사용자 요구사항 등록</span>
+          <div id="auto-save-indicator" style="display: none;">자동 저장 중...</div>
+        </div>
+        <div class="form-body">
+          <form id="requirement-form">
+            <div class="form-row">
+              <div class="form-col">
+                <div class="form-group">
+                  <label for="project-select">프로젝트 선택 *</label>
+                  <select class="form-control" id="project-select" required>
+                    <option value="">프로젝트를 선택하세요</option>
+                    <option value="2025-A-01-001-Ver0.1">프로젝트 관리 시스템 구축 (2025-A-01-001-Ver0.1)</option>
+                    <option value="2025-A-02-001-Ver0.1">전자문서 관리 시스템 (2025-A-02-001-Ver0.1)</option>
+                    <option value="2025-B-01-002-Ver1.3">고객 데이터 분석 시스템 (2025-B-01-002-Ver1.3)</option>
+                    <option value="2025-C-03-001-Ver0.2">인공지능 챗봇 개발 (2025-C-03-001-Ver0.2)</option>
+                    <option value="2025-B-02-003-Ver0.5">모바일 앱 리뉴얼 (2025-B-02-003-Ver0.5)</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-col">
+                <div class="form-group">
+                  <label for="requirement-type">등록 구분 *</label>
+                  <select class="form-control" id="requirement-type" required>
+                    <option value="">등록 구분을 선택하세요</option>
+                    <option value="new">신규 개발요구사항</option>
+                    <option value="change">요구사항 변경(정정)</option>
+                    <option value="additional">추가 요구사항</option>
+                    <option value="improvement">기타 개선 제안 사항</option>
+                    <option value="bug">오류수정</option>
+                    <option value="other">기타</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-col">
+                <div class="form-group">
+                  <label for="registrant-type">등록자 구분 *</label>
+                  <select class="form-control" id="registrant-type" required>
+                    <option value="user" selected>사용자</option>
+                    <option value="chatgpt">ChatGPT</option>
+                    <option value="claude">Claude Sonnet</option>
+                    <option value="gemini">Google Gemini</option>
+                    <option value="grok">Grok 3</option>
+                    <option value="qwen">Qwen 3</option>
+                    <option value="deepseek">DeepSeek R1</option>
+                    <option value="llama">LLaMA 3</option>
+                    <option value="groq">Groq</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-col">
+                <div class="form-group">
+                  <label for="registrant-name">등록자 이름 *</label>
+                  <input type="text" class="form-control" id="registrant-name" placeholder="등록자 이름 입력" required>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="requirement-title">요구사항 제목 *</label>
+              <input type="text" class="form-control" id="requirement-title" placeholder="요구사항 제목 입력" required>
+            </div>
+            
+            <div class="form-group">
+              <label>요구사항 내용 *</label>
+              <div class="editor-container">
+                <div class="editor-toolbar">
+                  <button type="button" title="굵게" onclick="formatText('bold')"><i class="fas fa-bold"></i></button>
+                  <button type="button" title="기울임꼴" onclick="formatText('italic')"><i class="fas fa-italic"></i></button>
+                  <button type="button" title="밑줄" onclick="formatText('underline')"><i class="fas fa-underline"></i></button>
+                  <div class="separator"></div>
+                  <button type="button" title="글꼴 크기 줄이기" onclick="changeFontSize('-')"><i class="fas fa-minus"></i></button>
+                  <button type="button" title="글꼴 크기 키우기" onclick="changeFontSize('+')"><i class="fas fa-plus"></i></button>
+                  <div class="separator"></div>
+                  <button type="button" title="왼쪽 정렬" onclick="alignText('left')"><i class="fas fa-align-left"></i></button>
+                  <button type="button" title="가운데 정렬" onclick="alignText('center')"><i class="fas fa-align-center"></i></button>
+                  <button type="button" title="오른쪽 정렬" onclick="alignText('right')"><i class="fas fa-align-right"></i></button>
+                  <div class="separator"></div>
+                  <button type="button" title="찾기/바꾸기" onclick="toggleFindReplace()"><i class="fas fa-search"></i></button>
+                  <button type="button" title="다른 이름으로 저장" onclick="saveAs()"><i class="fas fa-save"></i></button>
+                </div>
+                <div class="find-replace-panel" id="find-replace-panel" style="display: none;">
+                  <input type="text" class="form-control" id="find-text" placeholder="찾을 내용">
+                  <input type="text" class="form-control" id="replace-text" placeholder="바꿀 내용">
+                  <button class="btn" onclick="findText()">찾기</button>
+                  <button class="btn" onclick="replaceText()">바꾸기</button>
+                  <button class="btn" onclick="replaceAllText()">모두 바꾸기</button>
+                  <button class="btn" onclick="closeFindReplace()">닫기</button>
+                </div>
+                <textarea id="requirement-content" class="editor-content" placeholder="요구사항 상세 내용을 작성하세요" required></textarea>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label>첨부파일</label>
+              <div class="file-attachments">
+                <div class="file-list" id="file-list">
+                  <div class="text-center" style="padding: 20px;">
+                    첨부된 파일이 없습니다.
+                  </div>
+                </div>
+                <div class="file-upload-area" onclick="document.getElementById('file-upload').click()">
+                  <i class="fas fa-cloud-upload-alt"></i>
+                  <p>파일을 여기에 끌어다 놓거나 클릭하여 업로드하세요</p>
+                  <input type="file" id="file-upload" style="display: none;" multiple>
+                </div>
+              </div>
+            </div>
+            
+            <div class="version-control">
+              <div class="form-group">
+                <label for="version">버전</label>
+                <select class="form-control" id="version">
+                  <option value="0.1" selected>0.1 (초안)</option>
+                </select>
+              </div>
+              <div class="form-group" style="margin-left: 15px;">
+                <label for="version-comment">버전 설명</label>
+                <input type="text" class="form-control" id="version-comment" value="초기 작성" style="width: 200px;">
+              </div>
+            </div>
+            
+            <div class="version-history">
+              <div class="version-history-header">
+                <h4>버전 기록</h4>
+              </div>
+              <div class="version-history-list">
+                <div class="version-item">
+                  <div class="version-info">
+                    <span class="version-number">v0.1 (초안)</span>
+                    <span class="version-date">2025-06-04 14:30</span>
+                  </div>
+                  <span class="version-author">작성중...</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="action-buttons">
+              <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save"></i> 저장
+              </button>
+              <button type="button" class="btn" onclick="window.location.href='project-requirements-list.html'">
+                <i class="fas fa-times"></i> 취소
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- 푸터 -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>프로젝트 관리 시스템</h3>
+          <p>체계적인 프로젝트 관리를 위한 종합 솔루션</p>
+        </div>
+        <div class="footer-section">
+          <h3>바로가기</h3>
+          <div class="footer-links">
+            <a href="index.html">홈</a>
+            <a href="project-list.html">프로젝트 목록</a>
+            <a href="dashboard.html">대시보드</a>
+            <a href="#">설정</a>
+          </div>
+        </div>
+        <div class="footer-section">
+          <h3>고객지원</h3>
+          <p>이메일: support@projectsystem.co.kr</p>
+          <p>전화: 02-123-4567</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 프로젝트 관리 시스템. All Rights Reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      initEditor();
+      initFileUpload();
+      initFormAutoSave();
+      initFormSubmit();
+    });
+    
+    // 메모장 에디터 초기화
+    function initEditor() {
+      const editor = document.getElementById('requirement-content');
+      
+      // 초기 내용 설정 (실제로는 필요한 경우에만)
+      editor.value = '';
+      
+      // 편집기 크기 자동 조절
+      editor.addEventListener('input', function() {
+        this.style.height = 'auto';
+        this.style.height = (this.scrollHeight) + 'px';
+      });
+    }
+    
+    // 텍스트 서식 적용
+    function formatText(format) {
+      const editor = document.getElementById('requirement-content');
+      const selStart = editor.selectionStart;
+      const selEnd = editor.selectionEnd;
+      const selectedText = editor.value.substring(selStart, selEnd);
+      
+      let formattedText = '';
+      let cursorPos = selStart;
+      
+      switch(format) {
+        case 'bold':
+          formattedText = `**${selectedText}**`;
+          cursorPos = selStart + 2;
+          break;
+        case 'italic':
+          formattedText = `*${selectedText}*`;
+          cursorPos = selStart + 1;
+          break;
+        case 'underline':
+          formattedText = `_${selectedText}_`;
+          cursorPos = selStart + 1;
+          break;
+        default:
+          formattedText = selectedText;
+      }
+      
+      // 선택된 텍스트를 서식이 적용된 텍스트로 대체
+      if (selectedText) {
+        editor.value = editor.value.substring(0, selStart) + formattedText + editor.value.substring(selEnd);
+        editor.setSelectionRange(selStart, selStart + formattedText.length);
+      } else {
+        editor.value = editor.value.substring(0, selStart) + formattedText + editor.value.substring(selEnd);
+        editor.setSelectionRange(cursorPos, cursorPos + selectedText.length);
+      }
+      
+      editor.focus();
+    }
+    
+    // 글꼴 크기 변경
+    function changeFontSize(direction) {
+      // 실제 구현에서는 CSS를 이용하여 글꼴 크기를 조절해야 함
+      const editor = document.getElementById('requirement-content');
+      
+      // 현재 폰트 크기 가져오기 (실제로는 계산 필요)
+      let currentSize = parseInt(window.getComputedStyle(editor).fontSize);
+      
+      // 폰트 크기 조절
+      if (direction === '+') {
+        currentSize += 2;
+      } else {
+        currentSize -= 2;
+        if (currentSize < 10) currentSize = 10; // 최소 크기 제한
+      }
+      
+      // 새 폰트 크기 적용
+      editor.style.fontSize = currentSize + 'px';
+    }
+    
+    // 텍스트 정렬
+    function alignText(align) {
+      const editor = document.getElementById('requirement-content');
+      editor.style.textAlign = align;
+    }
+    
+    // 찾기/바꾸기 패널 토글
+    function toggleFindReplace() {
+      const panel = document.getElementById('find-replace-panel');
+      panel.style.display = panel.style.display === 'none' ? 'flex' : 'none';
+      
+      if (panel.style.display === 'flex') {
+        document.getElementById('find-text').focus();
+      }
+    }
+    
+    // 찾기/바꾸기 패널 닫기
+    function closeFindReplace() {
+      document.getElementById('find-replace-panel').style.display = 'none';
+    }
+    
+    // 텍스트 찾기
+    function findText() {
+      const editor = document.getElementById('requirement-content');
+      const findText = document.getElementById('find-text').value;
+      
+      if (!findText) return;
+      
+      const content = editor.value;
+      const position = content.indexOf(findText, editor.selectionEnd);
+      
+      if (position !== -1) {
+        editor.setSelectionRange(position, position + findText.length);
+        editor.focus();
+      } else {
+        // 검색 결과가 없는 경우 처음부터 다시 검색
+        const firstPosition = content.indexOf(findText);
+        if (firstPosition !== -1) {
+          editor.setSelectionRange(firstPosition, firstPosition + findText.length);
+          editor.focus();
+          alert('처음부터 다시 검색합니다.');
+        } else {
+          alert('찾을 수 없습니다.');
+        }
+      }
+    }
+    
+    // 텍스트 바꾸기
+    function replaceText() {
+      const editor = document.getElementById('requirement-content');
+      const findText = document.getElementById('find-text').value;
+      const replaceText = document.getElementById('replace-text').value;
+      
+      if (!findText) return;
+      
+      const selStart = editor.selectionStart;
+      const selEnd = editor.selectionEnd;
+      const selectedText = editor.value.substring(selStart, selEnd);
+      
+      if (selectedText === findText) {
+        editor.value = editor.value.substring(0, selStart) + replaceText + editor.value.substring(selEnd);
+        editor.setSelectionRange(selStart + replaceText.length, selStart + replaceText.length);
+        findText(); // 다음 항목 찾기
+      } else {
+        findText();
+      }
+    }
+    
+    // 텍스트 모두 바꾸기
+    function replaceAllText() {
+      const editor = document.getElementById('requirement-content');
+      const findText = document.getElementById('find-text').value;
+      const replaceText = document.getElementById('replace-text').value;
+      
+      if (!findText) return;
+      
+      const content = editor.value;
+      const newContent = content.split(findText).join(replaceText);
+      editor.value = newContent;
+      
+      const count = (content.match(new RegExp(findText, 'g')) || []).length;
+      alert(`${count}개 항목이 변경되었습니다.`);
+    }
+    
+    // 다른 이름으로 저장
+    function saveAs() {
+      const content = document.getElementById('requirement-content').value;
+      const title = document.getElementById('requirement-title').value || '요구사항';
+      
+      // 텍스트 파일 생성
+      const blob = new Blob([content], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      
+      // 다운로드 링크 생성 및 클릭
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${title}.txt`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+    
+    // 파일 업로드 초기화
+    function initFileUpload() {
+      const fileUpload = document.getElementById('file-upload');
+      const dropArea = document.querySelector('.file-upload-area');
+      const fileList = document.getElementById('file-list');
+      
+      // 드래그 앤 드롭 이벤트
+      ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropArea.addEventListener(eventName, preventDefaults, false);
+      });
+      
+      function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      
+      ['dragenter', 'dragover'].forEach(eventName => {
+        dropArea.addEventListener(eventName, highlight, false);
+      });
+      
+      ['dragleave', 'drop'].forEach(eventName => {
+        dropArea.addEventListener(eventName, unhighlight, false);
+      });
+      
+      function highlight() {
+        dropArea.style.borderColor = '#3498db';
+        dropArea.style.backgroundColor = '#e3f2fd';
+      }
+      
+      function unhighlight() {
+        dropArea.style.borderColor = '#ddd';
+        dropArea.style.backgroundColor = '';
+      }
+      
+      // 드롭 이벤트
+      dropArea.addEventListener('drop', function(e) {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        handleFiles(files);
+      });
+      
+      // 파일 선택 이벤트
+      fileUpload.addEventListener('change', function() {
+        handleFiles(this.files);
+      });
+      
+      // 파일 처리
+      function handleFiles(files) {
+        if (files.length > 0) {
+          // 첫번째 파일 메시지 제거
+          if (fileList.innerHTML.includes('첨부된 파일이 없습니다.')) {
+            fileList.innerHTML = '';
+          }
+          
+          [...files].forEach(file => {
+            addFileToList(file);
+          });
+        }
+      }
+      
+      // 파일 목록에 추가
+      function addFileToList(file) {
+        // 파일 크기 포맷팅
+        let fileSize = '';
+        if (file.size < 1024) {
+          fileSize = file.size + ' bytes';
+        } else if (file.size < 1048576) {
+          fileSize = (file.size / 1024).toFixed(1) + ' KB';
+        } else {
+          fileSize = (file.size / 1048576).toFixed(1) + ' MB';
+        }
+        
+        // 파일 아이콘 결정
+        let fileIcon = 'fa-file';
+        const extension = file.name.split('.').pop().toLowerCase();
+        
+        switch(extension) {
+          case 'pdf':
+            fileIcon = 'fa-file-pdf';
+            break;
+          case 'doc':
+          case 'docx':
+            fileIcon = 'fa-file-word';
+            break;
+          case 'xls':
+          case 'xlsx':
+            fileIcon = 'fa-file-excel';
+            break;
+          case 'ppt':
+          case 'pptx':
+            fileIcon = 'fa-file-powerpoint';
+            break;
+          case 'jpg':
+          case 'jpeg':
+          case 'png':
+          case 'gif':
+            fileIcon = 'fa-file-image';
+            break;
+          case 'zip':
+          case 'rar':
+            fileIcon = 'fa-file-archive';
+            break;
+          case 'txt':
+            fileIcon = 'fa-file-alt';
+            break;
+        }
+        
+        // 파일 항목 생성
+        const fileItem = document.createElement('div');
+        fileItem.className = 'file-item';
+        fileItem.innerHTML = `
+          <i class="file-icon far ${fileIcon}"></i>
+          <span class="file-name">${file.name}</span>
+          <span class="file-size">${fileSize}</span>
+          <div class="file-actions">
+            <button type="button" title="다운로드"><i class="fas fa-download"></i></button>
+            <button type="button" title="삭제" class="remove-file"><i class="fas fa-trash-alt"></i></button>
+          </div>
+        `;
+        
+        // 삭제 버튼 이벤트
+        fileItem.querySelector('.remove-file').addEventListener('click', function() {
+          fileList.removeChild(fileItem);
+          
+          // 첨부파일이 없는 경우 메시지 표시
+          if (fileList.children.length === 0) {
+            fileList.innerHTML = `
+              <div class="text-center" style="padding: 20px;">
+                첨부된 파일이 없습니다.
+              </div>
+            `;
+          }
+        });
+        
+        fileList.appendChild(fileItem);
+      }
+    }
+    
+    // 폼 자동 저장 기능
+    function initFormAutoSave() {
+      const autoSaveInterval = 1000 * 60 * 3; // 3분마다 자동 저장
+      const autoSaveIndicator = document.getElementById('auto-save-indicator');
+      
+      // 자동 저장 인터벌 설정
+      setInterval(function() {
+        // 자동 저장 표시
+        autoSaveIndicator.style.display = 'block';
+        
+        // 폼 데이터 저장 (localStorage에 임시 저장)
+        saveFormData();
+        
+        // 3초 후 자동 저장 표시 숨김
+        setTimeout(function() {
+          autoSaveIndicator.style.display = 'none';
+        }, 3000);
+      }, autoSaveInterval);
+      
+      // 이전에 저장된 데이터가 있으면 불러오기
+      loadFormData();
+    }
+    
+    // 폼 데이터 저장
+    function saveFormData() {
+      const formData = {
+        projectId: document.getElementById('project-select').value,
+        requirementType: document.getElementById('requirement-type').value,
+        registrantType: document.getElementById('registrant-type').value,
+        registrantName: document.getElementById('registrant-name').value,
+        title: document.getElementById('requirement-title').value,
+        content: document.getElementById('requirement-content').value,
+        version: document.getElementById('version').value,
+        versionComment: document.getElementById('version-comment').value,
+        timestamp: new Date().toISOString()
+      };
+      
+      localStorage.setItem('requirementFormDraft', JSON.stringify(formData));
+    }
+    
+    // 저장된 폼 데이터 불러오기
+    function loadFormData() {
+      const savedData = localStorage.getItem('requirementFormDraft');
+      if (savedData) {
+        const formData = JSON.parse(savedData);
+        
+        if (formData.projectId) document.getElementById('project-select').value = formData.projectId;
+        if (formData.requirementType) document.getElementById('requirement-type').value = formData.requirementType;
+        if (formData.registrantType) document.getElementById('registrant-type').value = formData.registrantType;
+        if (formData.registrantName) document.getElementById('registrant-name').value = formData.registrantName;
+        if (formData.title) document.getElementById('requirement-title').value = formData.title;
+        if (formData.content) document.getElementById('requirement-content').value = formData.content;
+        if (formData.version) document.getElementById('version').value = formData.version;
+        if (formData.versionComment) document.getElementById('version-comment').value = formData.versionComment;
+      }
+    }
+    
+    // 폼 제출 초기화
+    function initFormSubmit() {
+      const form = document.getElementById('requirement-form');
+      
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // 필수 필드 검증
+        const requiredFields = form.querySelectorAll('[required]');
+        let isValid = true;
+        
+        requiredFields.forEach(field => {
+          if (!field.value.trim()) {
+            isValid = false;
+            field.classList.add('invalid');
+          } else {
+            field.classList.remove('invalid');
+          }
+        });
+        
+        if (isValid) {
+          // 실제로는 서버에 데이터 전송
+          // 현재는 로컬스토리지에 임시 저장 후 목록 페이지로 이동
+          saveFormData();
+          alert('요구사항이 저장되었습니다.');
+          
+          // 임시 저장 데이터 삭제
+          localStorage.removeItem('requirementFormDraft');
+          
+          // 목록 페이지로 이동
+          window.location.href = 'project-requirements-list.html';
+        } else {
+          alert('필수 필드를 모두 입력해주세요.');
+        }
+      });
+    }
+  </script>
+</body>
+</html>
